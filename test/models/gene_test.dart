@@ -73,7 +73,7 @@ class FakeGene extends Gene<int> {
   });
 
   @override
-  int mutate() {
+  int mutate({int? value}) {
     return mutatedValue;
   }
 }

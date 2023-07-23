@@ -25,7 +25,7 @@ abstract class Gene<T> extends Equatable {
     final randValue = randomValue ?? Random().nextDouble();
 
     if (mutationRate > randValue) {
-      this.value = mutate();
+      this.value = this.mutate(value: value);
     } else {
       this.value = value;
     }
@@ -35,7 +35,8 @@ abstract class Gene<T> extends Equatable {
   late final T value;
 
   /// Returns a mutated encoded value of type <T>.
-  T mutate();
+  @visibleForTesting
+  T mutate({T? value});
 
   @override
   List<Object?> get props => [
