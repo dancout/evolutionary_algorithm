@@ -16,7 +16,7 @@ class DNAService {
 
   /// Returns a randomly intialized DNA object.
   DNA randomDNA() {
-    List<Gene> genes = <Gene>[];
+    final List<Gene> genes = <Gene>[];
 
     for (int i = 0; i < numGenes; i++) {
       genes.add(geneService.randomGene());

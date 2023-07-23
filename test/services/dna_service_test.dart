@@ -22,7 +22,7 @@ void main() {
   group('randomDNA', () {
     test('returns a List of Genes that is numGenes long', () async {
       when(() => mockGeneService.randomGene()).thenReturn(mockGene);
-      List<Gene> genes = [];
+      final List<Gene> genes = [];
       for (int i = 0; i < numGenes; i++) {
         genes.add(mockGene);
       }
