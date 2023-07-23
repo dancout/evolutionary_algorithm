@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:evolutionary_algorithm/models/gene.dart';
 
-abstract class DNA extends Equatable {
+class DNA extends Equatable {
   const DNA({
     required this.genes,
   });
