@@ -19,6 +19,26 @@ void main() {
     testObject = DNAService(numGenes: numGenes, geneService: mockGeneService);
   });
 
+  group('initialization', () {
+    test('should throw assertion error if numGenes is 0', () async {
+      const zeroNumGenes = 0;
+
+      expect(
+        () => DNAService(numGenes: zeroNumGenes, geneService: mockGeneService),
+        throwsAssertionError,
+      );
+    });
+
+    test('should throw assertion error if numGenes is negative', () async {
+      const zeroNumGenes = -1;
+
+      expect(
+        () => DNAService(numGenes: zeroNumGenes, geneService: mockGeneService),
+        throwsAssertionError,
+      );
+    });
+  });
+
   group('randomDNA', () {
     test('returns a List of Genes that is numGenes long', () async {
       when(() => mockGeneService.randomGene()).thenReturn(mockGene);

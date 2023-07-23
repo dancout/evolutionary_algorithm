@@ -3,10 +3,12 @@ import 'package:evolutionary_algorithm/models/gene.dart';
 import 'package:evolutionary_algorithm/services/gene_service.dart';
 
 class DNAService {
-  const DNAService({
+  DNAService({
     required this.numGenes,
     required this.geneService,
-  });
+  }) {
+    assert(numGenes > 0);
+  }
 
   /// The number of Genes required for a DNA sequence.
   final int numGenes;
