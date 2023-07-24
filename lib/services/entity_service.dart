@@ -5,11 +5,13 @@ import 'package:evolutionary_algorithm/models/entity.dart';
 import 'package:evolutionary_algorithm/models/gene.dart';
 import 'package:evolutionary_algorithm/services/dna_service.dart';
 import 'package:evolutionary_algorithm/services/fitness_service.dart';
+import 'package:evolutionary_algorithm/services/gene_service.dart';
 
 class EntityService {
   EntityService({
     required this.dnaService,
     required this.fitnessService,
+    required this.geneService,
     Random? random,
   }) : random = random ?? Random();
 
@@ -18,6 +20,9 @@ class EntityService {
 
   /// Represents the service used to calculate this entity's fitness core.
   final FitnessService fitnessService;
+
+  /// Represents the service used when mutating genes.
+  final GeneService geneService;
 
   /// Used as the internal random number generator.
   final Random random;
@@ -48,7 +53,15 @@ class EntityService {
 
     // Populate the crossedOverGenes list with genes from the input parents
     for (int i = 0; i < dnaService.numGenes; i++) {
-      crossedOverGenes.add(parents[randIndices[i]].dna.genes[i]);
+      final parentalGene = parents[randIndices[i]].dna.genes[i];
+
+      // Potentially mutate this gene
+      final potentiallyMutatedGene = geneService.mutateGene(gene: parentalGene);
+
+      // Add this gene into the list of Crossed Over Genes
+      crossedOverGenes.add(
+        potentiallyMutatedGene,
+      );
     }
 
     // Declare the new DNA

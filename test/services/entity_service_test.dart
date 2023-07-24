@@ -6,6 +6,7 @@ import 'package:evolutionary_algorithm/models/gene.dart';
 import 'package:evolutionary_algorithm/services/dna_service.dart';
 import 'package:evolutionary_algorithm/services/entity_service.dart';
 import 'package:evolutionary_algorithm/services/fitness_service.dart';
+import 'package:evolutionary_algorithm/services/gene_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -34,6 +35,7 @@ void main() {
 
   late DNAService mockDnaService;
   late FitnessService mockFitnessService;
+  late GeneService mockGeneService;
   late Random mockRandom;
 
   late EntityService testObject;
@@ -41,10 +43,12 @@ void main() {
   setUp(() async {
     mockDnaService = MockDNAService();
     mockFitnessService = MockFitnessService();
+    mockGeneService = MockGeneService();
     mockRandom = MockRandom();
     testObject = EntityService(
       dnaService: mockDnaService,
       fitnessService: mockFitnessService,
+      geneService: mockGeneService,
       random: mockRandom,
     );
   });
@@ -119,12 +123,14 @@ void main() {
         parentIndices.length,
         (index) => (_) => parentIndices[index],
       );
+
       when(() => mockDnaService.numGenes).thenReturn(numGenes);
 
       // This is done so that we can return a different value each time .nextInt
       // is called.
       when(() => mockRandom.nextInt(parents.length))
           .thenAnswer((_) => removableParentIndices.removeAt(0)(_));
+
       // Generate the list of genes based on the index of the parent
       final List<Gene> crossoverGenes = List.generate(
         numGenes,
@@ -133,6 +139,11 @@ void main() {
           return parents[parentIndex].dna.genes[index];
         },
       );
+
+      for (var crossoverGene in crossoverGenes) {
+        when(() => mockGeneService.mutateGene(gene: crossoverGene))
+            .thenReturn(crossoverGene);
+      }
 
       final crossoverDna = DNA(genes: crossoverGenes);
       when(() => mockFitnessService.calculateScore(dna: crossoverDna))
@@ -145,6 +156,12 @@ void main() {
 
       final actual = testObject.crossOver(parents: parents);
       expect(actual, expected);
+
+      for (var crossoverGene in crossoverGenes) {
+        verify(() => mockGeneService.mutateGene(gene: crossoverGene));
+      }
+      verify(() => mockFitnessService.calculateScore(dna: crossoverDna));
+      verify(() => mockDnaService.numGenes);
     });
   });
 }
