@@ -1,12 +1,24 @@
+import 'dart:math';
+
 import 'package:evolutionary_algorithm/models/gene.dart';
 import 'package:evolutionary_algorithm/services/gene_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+import '../mocks.dart';
 
 const mutatedValue = 2;
 
 void main() {
   const value = 1;
   const gene = Gene(value: value);
+
+  late Random mockRandom;
+
+  setUp(() async {
+    mockRandom = MockRandom();
+  });
+
   group('mutationRate', () {
     test('less than zero will throw assertion', () async {
       const mutationRate = -1.0;
@@ -42,12 +54,16 @@ void main() {
       const randomValue = 0.1;
       const mutationRate = 0.2;
 
-      final testObject = FakeGeneService(mutationRate: mutationRate);
+      when(() => mockRandom.nextDouble()).thenReturn(randomValue);
+
+      final testObject = FakeGeneService(
+        mutationRate: mutationRate,
+        random: mockRandom,
+      );
 
       final actualValue = testObject
           .mutateGene(
             gene: gene,
-            randomValue: randomValue,
           )
           .value;
 
@@ -59,12 +75,17 @@ void main() {
         () async {
       const randomValue = 0.2;
       const mutationRate = 0.1;
-      final testObject = FakeGeneService(mutationRate: mutationRate);
+
+      when(() => mockRandom.nextDouble()).thenReturn(randomValue);
+
+      final testObject = FakeGeneService(
+        mutationRate: mutationRate,
+        random: mockRandom,
+      );
 
       final actualValue = testObject
           .mutateGene(
             gene: gene,
-            randomValue: randomValue,
           )
           .value;
 
@@ -76,6 +97,7 @@ void main() {
 class FakeGeneService extends GeneService {
   FakeGeneService({
     required super.mutationRate,
+    super.random,
   });
 
   @override

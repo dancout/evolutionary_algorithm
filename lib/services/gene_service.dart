@@ -6,17 +6,23 @@ import 'package:flutter/foundation.dart';
 abstract class GeneService<T> {
   GeneService({
     required this.mutationRate,
+    Random? random,
   }) {
     assert(
       mutationRate >= 0.toDouble() && mutationRate <= 1.toDouble(),
       'mutationRate must be between 0 and 1, inclusively',
     );
+
+    this.random = random ?? Random();
   }
 
   /// A value between 0 and 1, inclusively, that represents if this gene
   /// should mutate its value. A value of 0 will never mutate and a value of 1
   /// will always mutate.
   final double mutationRate;
+
+  /// Used as the internal random number generator.
+  late final Random random;
 
   /// Returns a randomly initialized Gene of type <T>.
   Gene<T> randomGene();
@@ -30,16 +36,12 @@ abstract class GeneService<T> {
   Gene<T> mutateGene({
     /// The base Gene to be potentially mutated against.
     required Gene<T> gene,
-
-    /// This value will be used to check against the mutationRate to determine
-    /// if the gene should be mutated.
-    @visibleForTesting double? randomValue,
   }) {
     // Declare the value of type <T> to be passed forward.
     late final T value;
 
     // Generate a random value between 0 and 1.
-    randomValue = randomValue ?? Random().nextDouble();
+    final randomValue = random.nextDouble();
 
     // Check if we should mutate this
     if (mutationRate > randomValue) {
