@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:evolutionary_algorithm/models/dna.dart';
 import 'package:evolutionary_algorithm/models/entity.dart';
 import 'package:evolutionary_algorithm/models/gene.dart';
@@ -20,3 +22,5 @@ class MockDNA extends Mock implements DNA {}
 class MockEntityService extends Mock implements EntityService {}
 
 class MockEntity extends Mock implements Entity {}
+
+class MockRandom extends Mock implements Random {}
