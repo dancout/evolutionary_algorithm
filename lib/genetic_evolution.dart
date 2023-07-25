@@ -79,7 +79,7 @@ class GeneticEvolution {
       );
     }
 
-    return Generation(
+    return this.generation = Generation(
       // Default to -1 so that we are actually 0 indexed
       wave: (generation?.wave ?? -1) + 1,
       population: population,
