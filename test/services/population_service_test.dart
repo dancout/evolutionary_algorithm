@@ -47,7 +47,6 @@ void main() {
 
   group('reproduce', () {
     test('returns a newly created population', () async {
-      const numParents = 2;
       const smallPopulationSize = 3;
       final List<Entity> entities = [];
       for (int i = 0; i < smallPopulationSize; i++) {
@@ -66,8 +65,8 @@ void main() {
           .thenReturn(newChild);
 
       when(() => mockSelectionService.selectParents(
-          population: population,
-          numParents: numParents)).thenAnswer((invocation) => parents);
+            population: population,
+          )).thenAnswer((invocation) => parents);
 
       final expected = Population(entities: [
         newChild,
@@ -77,7 +76,6 @@ void main() {
 
       final actual = testObject.reproduce(
         population: population,
-        numParents: numParents,
       );
 
       expect(actual, expected);
@@ -85,7 +83,6 @@ void main() {
       verify(
         () => mockSelectionService.selectParents(
           population: population,
-          numParents: numParents,
         ),
       );
 

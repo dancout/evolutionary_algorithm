@@ -33,7 +33,6 @@ class PopulationService {
   /// [numParents] number of parents.
   Population reproduce({
     required Population population,
-    required int numParents,
   }) {
     // Declare the list of new children
     final List<Entity> children = [];
@@ -42,7 +41,6 @@ class PopulationService {
       // Select parents for the new child
       final parents = selectionService.selectParents(
         population: population,
-        numParents: numParents,
       );
 
       // Create the child from the given parents

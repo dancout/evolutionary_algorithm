@@ -6,25 +6,28 @@ import 'package:flutter/foundation.dart';
 
 class SelectionService {
   SelectionService({
+    required this.numParents,
+    bool? canReproduceWithSelf,
     Random? random,
-  }) : random = random ?? Random();
+  })  : canReproduceWithSelf = canReproduceWithSelf ?? true,
+        random = random ?? Random();
 
   /// Used as the internal random number generator.
   final Random random;
+
+  /// Represents the number of parents for each Entity
+  final int numParents;
+
+  /// Indicates if an entity can reproduce with itself. If false, then the
+  /// entity will be removed from the selection pool after being selected the
+  /// first time.
+  final bool canReproduceWithSelf;
 
   /// Returns a List<Entity> of parents to reproduce based on the input
   /// [population].
   List<Entity> selectParents({
     /// The population to select from.
     required Population population,
-
-    /// Represents the number of parents for each Entity
-    required int numParents,
-
-    /// Indicates if an entity can reproduce with itself. If false, then the
-    /// entity will be removed from the selection pool after being selected the
-    /// first time.
-    bool canReproduceWithSelf = true,
   }) {
     final List<Entity> parents = [];
     final entities = List.of(population.entities);

@@ -15,7 +15,10 @@ void main() {
 
   setUp(() async {
     mockRandom = MockRandom();
-    testObject = SelectionService(random: mockRandom);
+    testObject = SelectionService(
+      random: mockRandom,
+      numParents: 2,
+    );
   });
 
   group('normalizedFitnessScore', () {
@@ -107,13 +110,13 @@ void main() {
             dna: MockDNA(), fitnessScore: (1 + 10 * (10 - index)).toDouble()),
       );
 
-      testObject = SelectionService();
-
       for (int i = 0; i < 5; i++) {
+        testObject = SelectionService(
+          numParents: i,
+        );
         final population = Population(entities: entities);
         final actual = testObject.selectParents(
           population: population,
-          numParents: i,
         );
 
         expect(actual.length, i);
@@ -138,11 +141,15 @@ void main() {
         entities[2],
       ];
 
+      testObject = SelectionService(
+        numParents: expected.length,
+        canReproduceWithSelf: false,
+        random: mockRandom,
+      );
+
       final population = Population(entities: entities);
       final actual = testObject.selectParents(
         population: population,
-        numParents: 3,
-        canReproduceWithSelf: false,
       );
 
       expect(actual, expected);
@@ -165,11 +172,15 @@ void main() {
         entities[0],
       ];
 
+      testObject = SelectionService(
+        numParents: expected.length,
+        canReproduceWithSelf: true,
+        random: mockRandom,
+      );
+
       final population = Population(entities: entities);
       final actual = testObject.selectParents(
         population: population,
-        numParents: 3,
-        canReproduceWithSelf: true,
       );
 
       expect(actual, expected);
