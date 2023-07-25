@@ -1,6 +1,6 @@
-import 'package:evolutionary_algorithm/models/dna.dart';
-import 'package:evolutionary_algorithm/models/gene.dart';
-import 'package:evolutionary_algorithm/services/gene_service.dart';
+import 'package:genetic_evolution/models/dna.dart';
+import 'package:genetic_evolution/models/gene.dart';
+import 'package:genetic_evolution/services/gene_service.dart';
 
 class DNAService {
   DNAService({

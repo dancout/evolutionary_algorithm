@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:evolutionary_algorithm/models/gene.dart';
 import 'package:flutter/foundation.dart';
+import 'package:genetic_evolution/models/gene.dart';
 
 abstract class GeneService<T> {
   GeneService({

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:evolutionary_algorithm/models/gene.dart';
+import 'package:genetic_evolution/models/gene.dart';
 
 class DNA extends Equatable {
   const DNA({

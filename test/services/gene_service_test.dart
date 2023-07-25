@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:evolutionary_algorithm/models/gene.dart';
-import 'package:evolutionary_algorithm/services/gene_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:genetic_evolution/models/gene.dart';
+import 'package:genetic_evolution/services/gene_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';

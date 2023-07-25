@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/danielcouturier/development/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/danielcouturier/Documents/Projects/evolutionary_algorithm"
+export "FLUTTER_APPLICATION_PATH=/Users/danielcouturier/Documents/Projects/genetic_evolution"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=0.0.1"

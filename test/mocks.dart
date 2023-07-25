@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:evolutionary_algorithm/models/dna.dart';
-import 'package:evolutionary_algorithm/models/entity.dart';
-import 'package:evolutionary_algorithm/models/gene.dart';
-import 'package:evolutionary_algorithm/services/dna_service.dart';
-import 'package:evolutionary_algorithm/services/entity_service.dart';
-import 'package:evolutionary_algorithm/services/fitness_service.dart';
-import 'package:evolutionary_algorithm/services/gene_service.dart';
-import 'package:evolutionary_algorithm/services/selection_service.dart';
+import 'package:genetic_evolution/models/dna.dart';
+import 'package:genetic_evolution/models/entity.dart';
+import 'package:genetic_evolution/models/gene.dart';
+import 'package:genetic_evolution/services/dna_service.dart';
+import 'package:genetic_evolution/services/entity_service.dart';
+import 'package:genetic_evolution/services/fitness_service.dart';
+import 'package:genetic_evolution/services/gene_service.dart';
+import 'package:genetic_evolution/services/selection_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockGeneService extends Mock implements GeneService {}

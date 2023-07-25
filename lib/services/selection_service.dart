@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:evolutionary_algorithm/models/entity.dart';
-import 'package:evolutionary_algorithm/models/population.dart';
 import 'package:flutter/foundation.dart';
+import 'package:genetic_evolution/models/entity.dart';
+import 'package:genetic_evolution/models/population.dart';
 
 class SelectionService {
   SelectionService({

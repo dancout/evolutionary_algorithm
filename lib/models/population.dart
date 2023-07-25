@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:evolutionary_algorithm/models/entity.dart';
+import 'package:genetic_evolution/models/entity.dart';
 
 class Population extends Equatable {
   const Population({

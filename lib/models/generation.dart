@@ -1,4 +1,4 @@
-import 'package:evolutionary_algorithm/models/population.dart';
+import 'package:genetic_evolution/models/population.dart';
 
 class Generation {
   const Generation({
