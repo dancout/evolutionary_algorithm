@@ -11,7 +11,6 @@ class DNAService {
   }
 
   /// The number of Genes required for a DNA sequence.
-  // TODO: Consider moving this into randomDNA as a parameter
   final int numGenes;
 
   /// The GeneService used to intialize new Genes.
