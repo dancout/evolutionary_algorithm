@@ -13,7 +13,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Hello World Demo',
-      home: WordHomePage(),
+      home: WordHomePage(
+        autoPlay: true,
+      ),
     );
   }
 }
