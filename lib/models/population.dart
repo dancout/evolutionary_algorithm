@@ -19,6 +19,9 @@ extension PopulationExtension<T> on Population<T> {
   /// fitnessScore to lowest.
   List<Entity<T>> get sortedEntities => entities
     ..sort(
-      (a, b) => a.fitnessScore.compareTo(b.fitnessScore),
+      (a, b) => b.fitnessScore.compareTo(a.fitnessScore),
     );
+
+  /// Returns the top scoring entity from this population.
+  Entity<T> get topScoringEntity => sortedEntities.first;
 }
