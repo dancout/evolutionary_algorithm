@@ -2,7 +2,7 @@ import 'package:genetic_evolution/models/dna.dart';
 import 'package:genetic_evolution/models/gene.dart';
 import 'package:genetic_evolution/services/gene_service.dart';
 
-class DNAService {
+class DNAService<T> {
   DNAService({
     required this.numGenes,
     required this.geneService,
@@ -14,11 +14,11 @@ class DNAService {
   final int numGenes;
 
   /// The GeneService used to intialize new Genes.
-  final GeneService geneService;
+  final GeneService<T> geneService;
 
   /// Returns a randomly intialized DNA object.
-  DNA randomDNA() {
-    final List<Gene> genes = <Gene>[];
+  DNA<T> randomDNA() {
+    final List<Gene<T>> genes = <Gene<T>>[];
 
     for (int i = 0; i < numGenes; i++) {
       genes.add(geneService.randomGene());

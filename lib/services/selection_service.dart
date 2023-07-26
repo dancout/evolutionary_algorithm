@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:genetic_evolution/models/entity.dart';
 import 'package:genetic_evolution/models/population.dart';
 
-class SelectionService {
+class SelectionService<T> {
   SelectionService({
     required this.numParents,
     bool? canReproduceWithSelf,
@@ -25,11 +25,11 @@ class SelectionService {
 
   /// Returns a List<Entity> of parents to reproduce based on the input
   /// [population].
-  List<Entity> selectParents({
+  List<Entity<T>> selectParents({
     /// The population to select from.
-    required Population population,
+    required Population<T> population,
   }) {
-    final List<Entity> parents = [];
+    final List<Entity<T>> parents = [];
     final entities = List.of(population.entities);
 
     for (int i = 0; i < numParents; i++) {
@@ -52,8 +52,8 @@ class SelectionService {
   /// Returns an Entity from the input [entities] based on its probablility of
   /// being chosed.
   @visibleForTesting
-  Entity selectParentFromPool({
-    required List<Entity> entities,
+  Entity<T> selectParentFromPool({
+    required List<Entity<T>> entities,
   }) {
     // Calculate the normalized Fitness Score among all entities
     final normalizedScore = totalEntitiesFitnessScore(entities: entities);

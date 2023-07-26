@@ -1,6 +1,6 @@
 import 'package:genetic_evolution/models/population.dart';
 
-class Generation {
+class Generation<T> {
   const Generation({
     required this.wave,
     required this.population,
@@ -11,5 +11,5 @@ class Generation {
   final int wave;
 
   /// Represents the Popoulation of Entities within this Generation.
-  final Population population;
+  final Population<T> population;
 }

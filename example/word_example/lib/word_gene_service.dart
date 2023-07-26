@@ -1,7 +1,7 @@
 import 'package:genetic_evolution/models/gene.dart';
 import 'package:genetic_evolution/services/gene_service.dart';
 
-class WordGeneService extends GeneService {
+class WordGeneService extends GeneService<String> {
   WordGeneService({
     required super.mutationRate,
     super.random,
@@ -13,7 +13,7 @@ class WordGeneService extends GeneService {
   }
 
   @override
-  Gene randomGene() {
+  Gene<String> randomGene() {
     final List<int> possibleCharacters = [];
 
     for (int i = 65; i < 91; i++) {

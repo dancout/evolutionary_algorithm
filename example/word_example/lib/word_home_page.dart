@@ -21,8 +21,8 @@ class WordHomePage extends StatefulWidget {
 }
 
 class _WordHomePageState extends State<WordHomePage> {
-  late GeneticEvolution geneticEvolution;
-  late Generation generation;
+  late GeneticEvolution<String> geneticEvolution;
+  late Generation<String> generation;
   bool isPlaying = false;
 
   @override

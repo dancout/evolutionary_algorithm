@@ -7,7 +7,7 @@ import 'package:genetic_evolution/services/dna_service.dart';
 import 'package:genetic_evolution/services/fitness_service.dart';
 import 'package:genetic_evolution/services/gene_service.dart';
 
-class EntityService {
+class EntityService<T> {
   EntityService({
     required this.dnaService,
     required this.fitnessService,
@@ -16,20 +16,20 @@ class EntityService {
   }) : random = random ?? Random();
 
   /// Represents the DNAService used internally.
-  final DNAService dnaService;
+  final DNAService<T> dnaService;
 
   /// Represents the service used to calculate this entity's fitness core.
   final FitnessService fitnessService;
 
   /// Represents the service used when mutating genes.
-  final GeneService geneService;
+  final GeneService<T> geneService;
 
   /// Used as the internal random number generator.
   final Random random;
 
-  Entity randomEntity() {
+  Entity<T> randomEntity() {
     final randomDNA = dnaService.randomDNA();
-    return Entity(
+    return Entity<T>(
       dna: randomDNA,
       fitnessScore: fitnessService.calculateScore(dna: randomDNA),
     );
@@ -37,11 +37,11 @@ class EntityService {
 
   /// Returns an Entity created by randomly crossing over the genes present
   /// within the input [parents].
-  Entity crossOver({
-    required List<Entity> parents,
+  Entity<T> crossOver({
+    required List<Entity<T>> parents,
   }) {
     // Initialize your list of Genes
-    final List<Gene> crossedOverGenes = [];
+    final List<Gene<T>> crossedOverGenes = [];
     // Declare the number of parents
     final numParents = parents.length;
 
@@ -65,7 +65,7 @@ class EntityService {
     }
 
     // Declare the new DNA
-    final dna = DNA(genes: crossedOverGenes);
+    final dna = DNA<T>(genes: crossedOverGenes);
     // Declare the fitness score of this new DNA
     final fitnessScore = fitnessService.calculateScore(dna: dna);
 

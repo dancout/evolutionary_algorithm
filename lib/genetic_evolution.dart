@@ -9,7 +9,7 @@ import 'package:genetic_evolution/services/gene_service.dart';
 import 'package:genetic_evolution/services/population_service.dart';
 import 'package:genetic_evolution/services/selection_service.dart';
 
-class GeneticEvolution {
+class GeneticEvolution<T> {
   GeneticEvolution({
     required this.populationSize,
     required this.numGenes,
@@ -18,30 +18,30 @@ class GeneticEvolution {
     this.numParents = 2,
     this.canReproduceWithSelf,
   }) {
-    final dnaService = DNAService(
+    final dnaService = DNAService<T>(
       numGenes: numGenes,
       geneService: geneService,
     );
 
-    final entityService = EntityService(
+    final entityService = EntityService<T>(
       dnaService: dnaService,
       fitnessService: fitnessService,
       geneService: geneService,
     );
 
-    final selectionService = SelectionService(
+    final selectionService = SelectionService<T>(
       canReproduceWithSelf: canReproduceWithSelf,
       numParents: numParents,
     );
 
-    populationService = PopulationService(
+    populationService = PopulationService<T>(
       entityService: entityService,
       selectionService: selectionService,
     );
   }
 
   /// The service used to generate new populations for each generation
-  late final PopulationService populationService;
+  late final PopulationService<T> populationService;
 
   /// The size of each population
   final int populationSize;
@@ -61,12 +61,12 @@ class GeneticEvolution {
   final FitnessService fitnessService;
 
   /// The GeneService used to intialize new Genes.
-  final GeneService geneService;
+  final GeneService<T> geneService;
 
-  Generation? generation;
+  Generation<T>? generation;
 
-  Generation nextGeneration() {
-    late Population population;
+  Generation<T> nextGeneration() {
+    late Population<T> population;
 
     final generation = this.generation;
     if (generation == null) {
@@ -79,7 +79,7 @@ class GeneticEvolution {
       );
     }
 
-    return this.generation = Generation(
+    return this.generation = Generation<T>(
       // Default to -1 so that we are actually 0 indexed
       wave: (generation?.wave ?? -1) + 1,
       population: population,
