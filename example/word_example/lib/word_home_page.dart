@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:genetic_evolution/genetic_evolution.dart';
+import 'package:genetic_evolution/models/entity.dart';
 import 'package:genetic_evolution/models/generation.dart';
 import 'package:genetic_evolution/models/population.dart';
 import 'package:word_example/word_fitness_service.dart';
@@ -24,6 +25,7 @@ class _WordHomePageState extends State<WordHomePage> {
   late GeneticEvolution<String> geneticEvolution;
   late Generation<String> generation;
   bool isPlaying = false;
+  int? waveTargetFound;
 
   @override
   void initState() {
@@ -58,33 +60,82 @@ class _WordHomePageState extends State<WordHomePage> {
       }
     });
 
-    final sortedEntities = generation.population.sortedEntities.reversed;
+    // Check if target has been found.
+    if (waveTargetFound == null &&
+        convertWord(generation.population.topScoringEntity) == target) {
+      waveTargetFound = generation.wave;
+    }
 
-    final List<String> words = [];
-
+    // Convert all entities into words
+    final List<Widget> wordRows = [
+      const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('value'),
+          SizedBox(width: 72),
+          Text('score'),
+        ],
+      ),
+    ];
+    final sortedEntities = generation.population.entities;
     for (var entity in sortedEntities) {
-      String word = '';
-      for (var gene in entity.dna.genes) {
-        var value = gene.value;
+      String word = convertWord(entity);
 
-        word += value;
-      }
-
-      word += ' - score: ${entity.fitnessScore}';
-
-      words.add(word);
+      wordRows.add(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(word),
+            const SizedBox(width: 24),
+            Text(entity.fitnessScore.toString()),
+          ],
+        ),
+      );
     }
 
     return Scaffold(
-      body: Center(
-        child: ListView(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
-              child: Text(
-                'Wave: ${generation.wave.toString()}',
+            const Text(
+              'Target: $target',
+            ),
+            Text(
+              'Wave: ${generation.wave.toString()}',
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    const Text('Top Value'),
+                    Text(
+                      convertWord(generation.population.topScoringEntity),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 24),
+                Column(
+                  children: [
+                    const Text('Top Score'),
+                    Text(
+                      generation.population.topScoringEntity.fitnessScore
+                          .toString(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            if (waveTargetFound != null)
+              Text('Target reached at wave: $waveTargetFound'),
+            const SizedBox(height: 24),
+            const Text('Entities'),
+            Flexible(
+              child: ListView(
+                children: wordRows,
               ),
             ),
-            ...words.map((e) => Center(child: Text(e))).toList(),
           ],
         ),
       ),
@@ -105,5 +156,16 @@ class _WordHomePageState extends State<WordHomePage> {
             : const Icon(Icons.pause),
       ),
     );
+  }
+
+  String convertWord(Entity<String> entity) {
+    String word = '';
+    for (var gene in entity.dna.genes) {
+      var value = gene.value;
+
+      word += value;
+    }
+
+    return word;
   }
 }
