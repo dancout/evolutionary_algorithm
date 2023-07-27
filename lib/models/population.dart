@@ -17,7 +17,7 @@ class Population<T> extends Equatable {
 extension PopulationExtension<T> on Population<T> {
   /// Returns a list of entities in this population sorted in order from highest
   /// fitnessScore to lowest.
-  List<Entity<T>> get sortedEntities => entities
+  List<Entity<T>> get sortedEntities => List.from(entities)
     ..sort(
       (a, b) => b.fitnessScore.compareTo(a.fitnessScore),
     );

@@ -77,8 +77,8 @@ class _WordHomePageState extends State<WordHomePage> {
         ],
       ),
     ];
-    final sortedEntities = generation.population.entities;
-    for (var entity in sortedEntities) {
+    final entities = generation.population.entities;
+    for (var entity in entities) {
       String word = convertWord(entity);
 
       wordRows.add(
