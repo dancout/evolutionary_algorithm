@@ -8,9 +8,6 @@ import 'package:genetic_evolution/models/gene.dart';
 import 'package:genetic_evolution/models/generation.dart';
 import 'package:genetic_evolution/models/population.dart';
 
-const textColorIndex = 0;
-const backgroundColorIndex = 1;
-
 class AccessibilityHomePage extends StatefulWidget {
   const AccessibilityHomePage({
     super.key,
@@ -24,34 +21,39 @@ class AccessibilityHomePage extends StatefulWidget {
 }
 
 class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
-  late GeneticEvolution<Color> geneticEvolution;
-  late Generation<Color> generation;
+  late GeneticEvolution<int> geneticEvolution;
+  late Generation<int> generation;
   bool isPlaying = false;
   int? targetWaveFound;
   late double targetScore;
   double allTimeTopScore = 0.0;
+  static const populationSize = 100;
+  static const numParents = 3;
 
   List<Widget> colorBlocksValues = [];
   List<Widget> colorBlocksScores = [];
 
   @override
   void initState() {
-    const numGenes = 2;
-    const populationSize = 500;
-    const mutationRate = 0.005;
-    // TODO: Clean this up
-    // const mutationRate = 0.006;
+    const numGenes = 6;
+    const mutationRate = 0.15;
+
     final accessibilityFitnessService = AccessibilityFitnessService();
     final accessibilityGeneService =
         AccessibilityGeneService(mutationRate: mutationRate);
 
     targetScore = accessibilityFitnessService.calculateScore(
-        dna: const DNA(genes: [
-      Gene(value: Colors.black),
-      Gene(value: Colors.white),
+        dna: DNA(genes: [
+      Gene(value: Colors.black.red),
+      Gene(value: Colors.black.green),
+      Gene(value: Colors.black.blue),
+      Gene(value: Colors.white.red),
+      Gene(value: Colors.white.green),
+      Gene(value: Colors.white.blue),
     ]));
 
     geneticEvolution = GeneticEvolution(
+      numParents: numParents,
       populationSize: populationSize,
       numGenes: numGenes,
       fitnessService: accessibilityFitnessService,
@@ -68,7 +70,6 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       if (isPlaying) {
-        await Future.delayed(const Duration(milliseconds: 1));
         setState(() {
           // Move on to the next generation
           generation = geneticEvolution.nextGeneration();
@@ -85,24 +86,22 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
       allTimeTopScore = topFitnessScore;
     }
 
-    // TODO: Clean this up
-    // // Convert all entities into visual elements
-    // final entities = generation.population.entities;
+    // Convert all entities into visual elements
+    final entities = generation.population.entities;
 
-    // colorBlocksValues = [];
-    // colorBlocksScores = [];
+    colorBlocksValues = [];
+    colorBlocksScores = [];
 
-    // for (var entity in entities) {
-    //   colorBlocksValues.add(convertColorToBlockValue(entity));
-    //   colorBlocksScores.add(convertColorToBlockScore(entity));
-    // }
+    for (var entity in entities) {
+      colorBlocksValues.add(convertColorToBlockValue(entity));
+      colorBlocksScores.add(convertColorToBlockScore(entity));
+    }
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Target Score: $targetScore'),
             Text(
               'Wave: ${generation.wave.toString()}',
             ),
@@ -111,7 +110,7 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
               children: [
                 Column(
                   children: [
-                    const Text('Top Value'),
+                    const Text('Wave Top Value'),
                     convertColorToBlockValue(
                         generation.population.topScoringEntity)
                   ],
@@ -119,7 +118,7 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
                 const SizedBox(width: 24),
                 Column(
                   children: [
-                    const Text('Top Score'),
+                    const Text('Wave Top Score'),
                     Text(
                       generation.population.topScoringEntity.fitnessScore
                           .toString(),
@@ -130,8 +129,8 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
             ),
             if (targetWaveFound != null)
               Text('Top score found in wave: $targetWaveFound'),
-            // if (targetWaveFound == null)
-            Text('Top score found so far: $allTimeTopScore'),
+            if (targetWaveFound == null)
+              Text('Top score found so far: $allTimeTopScore'),
             const SizedBox(height: 24),
             const Text('Entities'),
             const Row(
@@ -181,19 +180,34 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
     );
   }
 
-  Widget convertColorToBlockValue(Entity<Color> entity) {
+  Widget convertColorToBlockValue(Entity<int> entity) {
+    const opacity = 1.0;
+    final backgroundColor = Color.fromRGBO(
+      entity.dna.genes[0].value,
+      entity.dna.genes[1].value,
+      entity.dna.genes[2].value,
+      opacity,
+    );
+
+    final textColor = Color.fromRGBO(
+      entity.dna.genes[3].value,
+      entity.dna.genes[4].value,
+      entity.dna.genes[5].value,
+      opacity,
+    );
+
     return Container(
-      color: entity.dna.genes[backgroundColorIndex].value,
+      color: backgroundColor,
       child: Text(
         'Hello World',
         style: TextStyle(
-          color: entity.dna.genes[textColorIndex].value,
+          color: textColor,
         ),
       ),
     );
   }
 
-  Widget convertColorToBlockScore(Entity<Color> entity) {
+  Widget convertColorToBlockScore(Entity<int> entity) {
     return Text(entity.fitnessScore.toString());
   }
 }

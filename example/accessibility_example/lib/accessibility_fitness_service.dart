@@ -1,18 +1,29 @@
 import 'dart:math';
 
-import 'package:accessibility_example/accessibility_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:genetic_evolution/models/dna.dart';
 import 'package:genetic_evolution/services/fitness_service.dart';
 
-class AccessibilityFitnessService extends FitnessService<Color> {
+class AccessibilityFitnessService extends FitnessService<int> {
   @override
   double get nonZeroBias => 0.01;
 
   @override
-  double scoringFunction({required DNA<Color> dna}) {
-    final textColor = dna.genes[textColorIndex].value;
-    final backgroundColor = dna.genes[backgroundColorIndex].value;
+  double scoringFunction({required DNA<int> dna}) {
+    const opacity = 1.0;
+    final textColorR = dna.genes[0].value;
+    final textColorG = dna.genes[1].value;
+    final textColorB = dna.genes[2].value;
+
+    final textColor =
+        Color.fromRGBO(textColorR, textColorG, textColorB, opacity);
+
+    final backgroundColorR = dna.genes[3].value;
+    final backgroundColorG = dna.genes[4].value;
+    final backgroundColorB = dna.genes[5].value;
+
+    final backgroundColor = Color.fromRGBO(
+        backgroundColorR, backgroundColorG, backgroundColorB, opacity);
 
     return contrastScore(
       textColor: textColor,
@@ -32,16 +43,6 @@ class AccessibilityFitnessService extends FitnessService<Color> {
 
     final score = (brightestLum + 0.05) / (darkestLum + 0.05);
 
-    // TODO: Clean this up
-    return pow(score, 1.1).toDouble();
-    // return score * 2.25;
-    // return score * 2.0;
-    // return score * 1.75;
-    // return score * 1.5;
-    // return score * 1.17;
-    // return score * 1.157;
-    // return score * 1.15575;
-    // this one kinda hovers at 23.24 for like forever - return score * 1.15555;
-    // a good one is mutation rate 0.0125 and score multiplyer of 1.15 -- didn't get to saturation though
+    return pow(score, 1.5).toDouble();
   }
 }
