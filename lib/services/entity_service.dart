@@ -70,6 +70,11 @@ class EntityService<T> {
     final fitnessScore = fitnessService.calculateScore(dna: dna);
 
     // Return the newly created Entity
-    return Entity(dna: dna, fitnessScore: fitnessScore);
+    return Entity(
+      dna: dna,
+      fitnessScore: fitnessScore,
+      // TODO: Need to make this conditionally store parents, for efficiency
+      parents: parents,
+    );
   }
 }

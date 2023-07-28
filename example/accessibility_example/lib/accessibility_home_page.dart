@@ -27,8 +27,11 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
   int? targetWaveFound;
   late double targetScore;
   double allTimeTopScore = 0.0;
-  static const populationSize = 100;
+  static const populationSize = 150;
+  // 3 parents can contribute to the reproduced Entity
   static const numParents = 3;
+  // A parent cannot be picked twice for the same child Entity
+  static const canReproduceWithSelf = false;
 
   List<Widget> colorBlocksValues = [];
   List<Widget> colorBlocksScores = [];
@@ -36,7 +39,7 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
   @override
   void initState() {
     const numGenes = 6;
-    const mutationRate = 0.15;
+    const mutationRate = 0.40;
 
     final accessibilityFitnessService = AccessibilityFitnessService();
     final accessibilityGeneService =
@@ -54,6 +57,7 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
 
     geneticEvolution = GeneticEvolution(
       numParents: numParents,
+      canReproduceWithSelf: canReproduceWithSelf,
       populationSize: populationSize,
       numGenes: numGenes,
       fitnessService: accessibilityFitnessService,
@@ -77,7 +81,7 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
       }
     });
 
-    var topFitnessScore = generation.population.topScoringEntity.fitnessScore;
+    final topFitnessScore = generation.population.topScoringEntity.fitnessScore;
     if (targetWaveFound == null && topFitnessScore == targetScore) {
       targetWaveFound = generation.wave;
     }
@@ -93,15 +97,17 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
     colorBlocksScores = [];
 
     for (var entity in entities) {
-      colorBlocksValues.add(convertColorToBlockValue(entity));
+      colorBlocksValues.add((convertColorToBlockValue(entity)));
       colorBlocksScores.add(convertColorToBlockScore(entity));
     }
 
+    final topScoringEntity = generation.population.topScoringEntity;
     return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Text('Target score: ${truncatedScore(targetScore)}'),
             Text(
               'Wave: ${generation.wave.toString()}',
             ),
@@ -111,8 +117,13 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
                 Column(
                   children: [
                     const Text('Wave Top Value'),
-                    convertColorToBlockValue(
-                        generation.population.topScoringEntity)
+                    convertColorToBlockValue(topScoringEntity),
+                    const SizedBox(height: 12),
+                    const Text('Child Parents'),
+                    ...?topScoringEntity.parents
+                        ?.map((e) => convertColorToBlockValue(e))
+                        .toList(),
+                    const SizedBox(height: 12),
                   ],
                 ),
                 const SizedBox(width: 24),
@@ -120,8 +131,8 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
                   children: [
                     const Text('Wave Top Score'),
                     Text(
-                      generation.population.topScoringEntity.fitnessScore
-                          .toString(),
+                      truncatedScore(
+                          generation.population.topScoringEntity.fitnessScore),
                     ),
                   ],
                 ),
@@ -130,7 +141,8 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
             if (targetWaveFound != null)
               Text('Top score found in wave: $targetWaveFound'),
             if (targetWaveFound == null)
-              Text('Top score found so far: $allTimeTopScore'),
+              Text(
+                  'Top score found so far: ${truncatedScore(allTimeTopScore)}'),
             const SizedBox(height: 24),
             const Text('Entities'),
             const Row(
@@ -180,6 +192,10 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
     );
   }
 
+  String truncatedScore(fitnessScore) {
+    return fitnessScore.toString().replaceRange(8, null, '');
+  }
+
   Widget convertColorToBlockValue(Entity<int> entity) {
     const opacity = 1.0;
     final backgroundColor = Color.fromRGBO(
@@ -208,6 +224,6 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
   }
 
   Widget convertColorToBlockScore(Entity<int> entity) {
-    return Text(entity.fitnessScore.toString());
+    return Text(truncatedScore(entity.fitnessScore));
   }
 }

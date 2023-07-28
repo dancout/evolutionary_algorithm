@@ -43,6 +43,6 @@ class AccessibilityFitnessService extends FitnessService<int> {
 
     final score = (brightestLum + 0.05) / (darkestLum + 0.05);
 
-    return pow(score, 1.5).toDouble();
+    return pow(score, 2.5).toDouble();
   }
 }
