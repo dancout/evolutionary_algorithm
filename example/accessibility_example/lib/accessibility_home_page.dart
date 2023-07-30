@@ -140,8 +140,15 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
                     const Text('Wave Top Score'),
                     Text(
                       truncatedScore(
-                          generation.population.topScoringEntity.fitnessScore),
+                        generation.population.topScoringEntity.fitnessScore,
+                      ),
                     ),
+                    const SizedBox(height: 12),
+                    const Text('Child Parents\' Scores'),
+                    ...?topScoringEntity.parents
+                        ?.map((e) => Text(truncatedScore(e.fitnessScore)))
+                        .toList(),
+                    const SizedBox(height: 12),
                   ],
                 ),
               ],
