@@ -14,8 +14,7 @@ class Entity<T> extends Equatable {
   /// Represents the fitness score for this Entity.
   final double fitnessScore;
 
-  // TODO: Add this into the mix as an optional thing so we can keep track of this
-  /// entity's parents.
+  /// Represents the parents of this entity.
   final List<Entity<T>>? parents;
 
   @override

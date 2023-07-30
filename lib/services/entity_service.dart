@@ -12,6 +12,7 @@ class EntityService<T> {
     required this.dnaService,
     required this.fitnessService,
     required this.geneService,
+    required this.trackParents,
     Random? random,
   }) : random = random ?? Random();
 
@@ -26,6 +27,10 @@ class EntityService<T> {
 
   /// Used as the internal random number generator.
   final Random random;
+
+  /// Whether or not to keep track of an Entity's parents from the previous
+  /// generation.
+  final bool trackParents;
 
   Entity<T> randomEntity() {
     final randomDNA = dnaService.randomDNA();
@@ -73,8 +78,7 @@ class EntityService<T> {
     return Entity(
       dna: dna,
       fitnessScore: fitnessScore,
-      // TODO: Need to make this conditionally store parents, for efficiency
-      parents: parents,
+      parents: trackParents ? parents : null,
     );
   }
 }
