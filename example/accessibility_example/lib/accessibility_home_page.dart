@@ -6,6 +6,7 @@ import 'package:genetic_evolution/models/dna.dart';
 import 'package:genetic_evolution/models/entity.dart';
 import 'package:genetic_evolution/models/gene.dart';
 import 'package:genetic_evolution/models/generation.dart';
+import 'package:genetic_evolution/models/genetic_evolution_config.dart';
 import 'package:genetic_evolution/models/population.dart';
 
 class AccessibilityHomePage extends StatefulWidget {
@@ -32,6 +33,8 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
   static const numParents = 3;
   // A parent cannot be picked twice for the same child Entity
   static const canReproduceWithSelf = false;
+  // We should keep track of an entity's parents from the previous generation.
+  static const trackParents = true;
 
   List<Widget> colorBlocksValues = [];
   List<Widget> colorBlocksScores = [];
@@ -55,11 +58,16 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
       Gene(value: Colors.white.blue),
     ]));
 
-    geneticEvolution = GeneticEvolution(
-      numParents: numParents,
-      canReproduceWithSelf: canReproduceWithSelf,
-      populationSize: populationSize,
+    const GeneticEvolutionConfig geneticEolutionConfig = GeneticEvolutionConfig(
       numGenes: numGenes,
+      numParents: numParents,
+      populationSize: populationSize,
+      canReproduceWithSelf: canReproduceWithSelf,
+      trackParents: trackParents,
+    );
+
+    geneticEvolution = GeneticEvolution(
+      geneticEolutionConfig: geneticEolutionConfig,
       fitnessService: accessibilityFitnessService,
       geneService: accessibilityGeneService,
     );

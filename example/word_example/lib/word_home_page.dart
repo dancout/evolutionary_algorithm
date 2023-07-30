@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:genetic_evolution/models/entity.dart';
 import 'package:genetic_evolution/models/generation.dart';
+import 'package:genetic_evolution/models/genetic_evolution_config.dart';
 import 'package:genetic_evolution/models/population.dart';
 import 'package:word_example/word_fitness_service.dart';
 import 'package:word_example/word_gene_service.dart';
@@ -35,9 +36,14 @@ class _WordHomePageState extends State<WordHomePage> {
     final wordFitnessService = WordFitnessService();
     final wordGeneService = WordGeneService(mutationRate: mutationRate);
 
-    geneticEvolution = GeneticEvolution(
-      populationSize: populationSize,
+    final GeneticEvolutionConfig geneticEvolutionConfig =
+        GeneticEvolutionConfig(
       numGenes: numGenes,
+      populationSize: populationSize,
+    );
+
+    geneticEvolution = GeneticEvolution(
+      geneticEolutionConfig: geneticEvolutionConfig,
       fitnessService: wordFitnessService,
       geneService: wordGeneService,
     );
