@@ -7,6 +7,7 @@ import 'package:genetic_evolution/services/dna_service.dart';
 import 'package:genetic_evolution/services/entity_service.dart';
 import 'package:genetic_evolution/services/fitness_service.dart';
 import 'package:genetic_evolution/services/gene_service.dart';
+import 'package:genetic_evolution/services/population_service.dart';
 import 'package:genetic_evolution/services/selection_service.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -27,3 +28,5 @@ class MockEntity extends Mock implements Entity {}
 class MockRandom extends Mock implements Random {}
 
 class MockSelectionService extends Mock implements SelectionService {}
+
+class MockPopulationService extends Mock implements PopulationService {}

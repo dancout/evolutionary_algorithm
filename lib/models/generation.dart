@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:genetic_evolution/models/population.dart';
 
-class Generation<T> {
+class Generation<T> extends Equatable {
   const Generation({
     required this.wave,
     required this.population,
@@ -12,4 +13,10 @@ class Generation<T> {
 
   /// Represents the Popoulation of Entities within this Generation.
   final Population<T> population;
+
+  @override
+  List<Object?> get props => [
+        wave,
+        population,
+      ];
 }

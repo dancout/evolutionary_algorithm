@@ -1,10 +1,11 @@
 import 'dart:math';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:genetic_evolution/models/entity.dart';
 import 'package:genetic_evolution/models/population.dart';
 
-class SelectionService<T> {
+class SelectionService<T> extends Equatable {
   SelectionService({
     required this.numParents,
     bool? canReproduceWithSelf,
@@ -92,4 +93,11 @@ class SelectionService<T> {
         .map((e) => e.fitnessScore)
         .reduce((value, element) => value + element);
   }
+
+  @override
+  List<Object?> get props => [
+        numParents,
+        random,
+        canReproduceWithSelf,
+      ];
 }

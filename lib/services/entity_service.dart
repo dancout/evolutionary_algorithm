@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:equatable/equatable.dart';
 import 'package:genetic_evolution/models/dna.dart';
 import 'package:genetic_evolution/models/entity.dart';
 import 'package:genetic_evolution/models/gene.dart';
@@ -7,7 +8,7 @@ import 'package:genetic_evolution/services/dna_service.dart';
 import 'package:genetic_evolution/services/fitness_service.dart';
 import 'package:genetic_evolution/services/gene_service.dart';
 
-class EntityService<T> {
+class EntityService<T> extends Equatable {
   EntityService({
     required this.dnaService,
     required this.fitnessService,
@@ -85,4 +86,13 @@ class EntityService<T> {
       parents: trackParents ? parents : null,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        dnaService,
+        fitnessService,
+        geneService,
+        random,
+        trackParents,
+      ];
 }

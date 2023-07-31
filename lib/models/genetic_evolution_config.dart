@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class GeneticEvolutionConfig {
   const GeneticEvolutionConfig({
     required this.numGenes,
@@ -5,6 +7,7 @@ class GeneticEvolutionConfig {
     this.numParents = 2,
     this.trackParents = false,
     this.canReproduceWithSelf = true,
+    this.random,
   });
 
   /// The number of genes in each DNA sequence within each Entity
@@ -24,4 +27,7 @@ class GeneticEvolutionConfig {
   /// entity will be removed from the selection pool after being selected the
   /// first time.
   final bool canReproduceWithSelf;
+
+  /// Used as the internal random number generator.
+  final Random? random;
 }

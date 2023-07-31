@@ -35,6 +35,8 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
   static const canReproduceWithSelf = false;
   // We should keep track of an entity's parents from the previous generation.
   static const trackParents = true;
+  // We should keep track of which wave a particular gene was mutated.
+  static const trackMutatedWaves = false;
 
   List<Widget> colorBlocksValues = [];
   List<Widget> colorBlocksScores = [];
@@ -67,7 +69,7 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
     );
 
     geneticEvolution = GeneticEvolution(
-      geneticEolutionConfig: geneticEolutionConfig,
+      geneticEvolutionConfig: geneticEolutionConfig,
       fitnessService: accessibilityFitnessService,
       geneService: accessibilityGeneService,
     );

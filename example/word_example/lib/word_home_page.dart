@@ -43,7 +43,7 @@ class _WordHomePageState extends State<WordHomePage> {
     );
 
     geneticEvolution = GeneticEvolution(
-      geneticEolutionConfig: geneticEvolutionConfig,
+      geneticEvolutionConfig: geneticEvolutionConfig,
       fitnessService: wordFitnessService,
       geneService: wordGeneService,
     );

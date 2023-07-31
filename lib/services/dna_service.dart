@@ -1,8 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:genetic_evolution/models/dna.dart';
 import 'package:genetic_evolution/models/gene.dart';
 import 'package:genetic_evolution/services/gene_service.dart';
 
-class DNAService<T> {
+class DNAService<T> extends Equatable {
   DNAService({
     required this.numGenes,
     required this.geneService,
@@ -26,4 +27,10 @@ class DNAService<T> {
 
     return DNA(genes: genes);
   }
+
+  @override
+  List<Object?> get props => [
+        numGenes,
+        geneService,
+      ];
 }
