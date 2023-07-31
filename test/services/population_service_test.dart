@@ -10,6 +10,7 @@ import '../mocks.dart';
 
 void main() {
   const populationSize = 100;
+  const wave = 1;
   final Entity mockEntity = MockEntity();
 
   late EntityService mockEntityService;
@@ -61,8 +62,10 @@ void main() {
         entities[1],
       ];
 
-      when(() => mockEntityService.crossOver(parents: parents))
-          .thenReturn(newChild);
+      when(() => mockEntityService.crossOver(
+            parents: parents,
+            wave: wave,
+          )).thenReturn(newChild);
 
       when(() => mockSelectionService.selectParents(
             population: population,
@@ -76,6 +79,7 @@ void main() {
 
       final actual = testObject.reproduce(
         population: population,
+        wave: wave,
       );
 
       expect(actual, expected);
@@ -86,7 +90,10 @@ void main() {
         ),
       );
 
-      verify(() => mockEntityService.crossOver(parents: parents));
+      verify(() => mockEntityService.crossOver(
+            parents: parents,
+            wave: wave,
+          ));
     });
   });
 }

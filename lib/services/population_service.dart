@@ -33,6 +33,7 @@ class PopulationService<T> {
   /// [numParents] number of parents.
   Population<T> reproduce({
     required Population<T> population,
+    required int wave,
   }) {
     // Declare the list of new children
     final List<Entity<T>> children = [];
@@ -44,7 +45,11 @@ class PopulationService<T> {
       );
 
       // Create the child from the given parents
-      final child = entityService.crossOver(parents: parents);
+      final child = entityService.crossOver(
+        parents: parents,
+        // TODO: I would love to get this from a provided value of some sort
+        wave: wave,
+      );
 
       // Add the child to the children list
       children.add(child);
