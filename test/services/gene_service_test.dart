@@ -12,6 +12,7 @@ const mutatedValue = 2;
 void main() {
   const value = 1;
   const gene = Gene(value: value);
+  const wave = 1;
 
   late Random mockRandom;
 
@@ -64,10 +65,37 @@ void main() {
       final actualValue = testObject
           .mutateGene(
             gene: gene,
+            wave: wave,
           )
           .value;
 
       expect(actualValue, mutatedValue);
+    });
+
+    test('is will save list of mutated waves when trackMutatedWaves is true',
+        () async {
+      const randomValue = 0.1;
+      const mutationRate = 0.2;
+
+      when(() => mockRandom.nextDouble()).thenReturn(randomValue);
+
+      final testObject = FakeGeneService(
+        mutationRate: mutationRate,
+        trackMutatedWaves: true,
+        random: mockRandom,
+      );
+
+      const expected = Gene(
+        value: mutatedValue,
+        mutatedWaves: [wave],
+      );
+
+      final actualGene = testObject.mutateGene(
+        gene: gene,
+        wave: wave,
+      );
+
+      expect(actualGene, expected);
     });
 
     test(
@@ -86,6 +114,7 @@ void main() {
       final actualValue = testObject
           .mutateGene(
             gene: gene,
+            wave: wave,
           )
           .value;
 
@@ -94,9 +123,10 @@ void main() {
   });
 }
 
-class FakeGeneService extends GeneService {
+class FakeGeneService extends GeneService<int> {
   FakeGeneService({
     required super.mutationRate,
+    super.trackMutatedWaves,
     super.random,
   });
 
@@ -106,7 +136,7 @@ class FakeGeneService extends GeneService {
   }
 
   @override
-  Gene randomGene() {
+  Gene<int> randomGene() {
     throw UnimplementedError();
   }
 }
