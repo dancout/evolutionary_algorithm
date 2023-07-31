@@ -44,6 +44,7 @@ class EntityService<T> {
   /// within the input [parents].
   Entity<T> crossOver({
     required List<Entity<T>> parents,
+    required int wave,
   }) {
     // Initialize your list of Genes
     final List<Gene<T>> crossedOverGenes = [];
@@ -61,7 +62,10 @@ class EntityService<T> {
       final parentalGene = parents[randIndices[i]].dna.genes[i];
 
       // Potentially mutate this gene
-      final potentiallyMutatedGene = geneService.mutateGene(gene: parentalGene);
+      final potentiallyMutatedGene = geneService.mutateGene(
+        gene: parentalGene,
+        wave: wave,
+      );
 
       // Add this gene into the list of Crossed Over Genes
       crossedOverGenes.add(

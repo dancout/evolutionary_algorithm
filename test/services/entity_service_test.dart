@@ -17,6 +17,7 @@ void main() {
   const fitnessScore = 100.0;
   const crossoverFitnessScore = 200.0;
   const trackParents = false;
+  const wave = 1;
 
   // A list meant to represent a random selection of the index corresponding to
   // 1 of 4 parents.
@@ -143,8 +144,10 @@ void main() {
       );
 
       for (var crossoverGene in crossoverGenes) {
-        when(() => mockGeneService.mutateGene(gene: crossoverGene))
-            .thenReturn(crossoverGene);
+        when(() => mockGeneService.mutateGene(
+              gene: crossoverGene,
+              wave: wave,
+            )).thenReturn(crossoverGene);
       }
 
       final crossoverDna = DNA(genes: crossoverGenes);
@@ -157,11 +160,17 @@ void main() {
         parents: null,
       );
 
-      final actual = testObject.crossOver(parents: parents);
+      final actual = testObject.crossOver(
+        parents: parents,
+        wave: wave,
+      );
       expect(actual, expected);
 
       for (var crossoverGene in crossoverGenes) {
-        verify(() => mockGeneService.mutateGene(gene: crossoverGene));
+        verify(() => mockGeneService.mutateGene(
+              gene: crossoverGene,
+              wave: wave,
+            ));
       }
       verify(() => mockFitnessService.calculateScore(dna: crossoverDna));
       verify(() => mockDnaService.numGenes);
@@ -237,8 +246,10 @@ void main() {
       );
 
       for (var crossoverGene in crossoverGenes) {
-        when(() => mockGeneService.mutateGene(gene: crossoverGene))
-            .thenReturn(crossoverGene);
+        when(() => mockGeneService.mutateGene(
+              gene: crossoverGene,
+              wave: wave,
+            )).thenReturn(crossoverGene);
       }
 
       final crossoverDna = DNA(genes: crossoverGenes);
@@ -259,11 +270,17 @@ void main() {
         random: mockRandom,
       );
 
-      final actual = testObject.crossOver(parents: parents);
+      final actual = testObject.crossOver(
+        parents: parents,
+        wave: wave,
+      );
       expect(actual, expected);
 
       for (var crossoverGene in crossoverGenes) {
-        verify(() => mockGeneService.mutateGene(gene: crossoverGene));
+        verify(() => mockGeneService.mutateGene(
+              gene: crossoverGene,
+              wave: wave,
+            ));
       }
       verify(() => mockFitnessService.calculateScore(dna: crossoverDna));
       verify(() => mockDnaService.numGenes);
