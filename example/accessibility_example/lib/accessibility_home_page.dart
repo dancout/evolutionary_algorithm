@@ -36,7 +36,7 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
   // We should keep track of an entity's parents from the previous generation.
   static const trackParents = true;
   // We should keep track of which wave a particular gene was mutated.
-  static const trackMutatedWaves = false;
+  static const trackMutatedWaves = true;
 
   List<Widget> colorBlocksValues = [];
   List<Widget> colorBlocksScores = [];
@@ -47,8 +47,10 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
     const mutationRate = 0.40;
 
     final accessibilityFitnessService = AccessibilityFitnessService();
-    final accessibilityGeneService =
-        AccessibilityGeneService(mutationRate: mutationRate);
+    final accessibilityGeneService = AccessibilityGeneService(
+      mutationRate: mutationRate,
+      trackMutatedWaves: trackMutatedWaves,
+    );
 
     targetScore = accessibilityFitnessService.calculateScore(
         dna: DNA(genes: [
@@ -90,8 +92,8 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
         });
       }
     });
-
-    final topFitnessScore = generation.population.topScoringEntity.fitnessScore;
+    final topScoringEntity = generation.population.topScoringEntity;
+    final topFitnessScore = topScoringEntity.fitnessScore;
     if (targetWaveFound == null && topFitnessScore == targetScore) {
       targetWaveFound = generation.wave;
     }
@@ -111,7 +113,6 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
       colorBlocksScores.add(convertColorToBlockScore(entity));
     }
 
-    final topScoringEntity = generation.population.topScoringEntity;
     return Scaffold(
       body: SafeArea(
         child: Column(
