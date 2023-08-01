@@ -23,5 +23,13 @@ extension PopulationExtension<T> on Population<T> {
     );
 
   /// Returns the top scoring entity from this population.
-  Entity<T> get topScoringEntity => sortedEntities.first;
+  Entity<T> get topScoringEntity {
+    return entities.fold(
+      entities.first,
+      (previousValue, element) =>
+          element.fitnessScore > previousValue.fitnessScore
+              ? element
+              : previousValue,
+    );
+  }
 }
