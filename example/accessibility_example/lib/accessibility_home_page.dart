@@ -38,9 +38,6 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
   // We should keep track of which wave a particular gene was mutated.
   static const trackMutatedWaves = true;
 
-  List<Widget> colorBlocksValues = [];
-  List<Widget> colorBlocksScores = [];
-
   @override
   void initState() {
     const numGenes = 6;
@@ -105,12 +102,19 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
     // Convert all entities into visual elements
     final entities = generation.population.entities;
 
-    colorBlocksValues = [];
-    colorBlocksScores = [];
+    final entitiesToDisplay = <Widget>[];
 
     for (var entity in entities) {
-      colorBlocksValues.add((convertColorToBlockValue(entity)));
-      colorBlocksScores.add(convertColorToBlockScore(entity));
+      entitiesToDisplay.add(
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            convertColorToBlockValue(entity),
+            const SizedBox(width: 8.0),
+            convertColorToBlockScore(entity),
+          ],
+        ),
+      );
     }
 
     return Scaffold(
@@ -163,30 +167,15 @@ class _AccessibilityHomePageState extends State<AccessibilityHomePage> {
                   'Top score found so far: ${truncatedScore(allTimeTopScore)}'),
             const SizedBox(height: 24),
             const Text('Entities'),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('value'),
-                SizedBox(width: 72),
-                Text('score'),
-              ],
-            ),
-            Flexible(
-              fit: FlexFit.loose,
-              child: ListView(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: colorBlocksValues,
-                    ),
-                    const SizedBox(width: 24),
-                    Column(
-                      children: colorBlocksScores,
-                    ),
-                  ],
+            Expanded(
+              child: SingleChildScrollView(
+                child: Wrap(
+                  spacing: 24.0,
+                  runSpacing: 4.0,
+                  direction: Axis.horizontal,
+                  children: entitiesToDisplay,
                 ),
-              ]),
+              ),
             ),
           ],
         ),
