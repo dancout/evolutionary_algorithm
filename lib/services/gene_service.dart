@@ -49,16 +49,23 @@ abstract class GeneService<T> {
     // Grab the list of mutated waves from the incoming Gene.
     var mutatedWaves = gene.mutatedWaves;
 
-    // If mutatedWaves exists, create a new list
-    if (mutatedWaves != null) {
+    if (wave == 0 && trackMutatedWaves) {
+      // If it is the first wave and we should be tracking mutated waves, set
+      // the list.
+      mutatedWaves = [];
+    } else if (mutatedWaves != null) {
+      // If mutatedWaves exists, create a new list
       mutatedWaves = List.from(mutatedWaves);
     }
+    // Otherwise, we keep the mutatedWaves list null because we are not tracking
+    // them.
 
     // Generate a random value between 0 and 1.
     final randomValue = random.nextDouble();
 
-    // Check if we should mutate this
-    if (mutationRate > randomValue) {
+    // Check if we should mutate this gene. We don't need to mutate on the first
+    // wave.
+    if (mutationRate > randomValue && wave > 0) {
       // Mutate the value.
       value = this.mutateValue(value: gene.value);
       mutatedWaves?.add(wave);

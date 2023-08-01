@@ -4,6 +4,7 @@ import 'package:genetic_evolution/services/gene_service.dart';
 class AccessibilityGeneService extends GeneService<int> {
   AccessibilityGeneService({
     required super.mutationRate,
+    super.trackMutatedWaves,
     super.random,
   });
 

@@ -22,7 +22,14 @@ class DNAService<T> extends Equatable {
     final List<Gene<T>> genes = <Gene<T>>[];
 
     for (int i = 0; i < numGenes; i++) {
-      genes.add(geneService.randomGene());
+      final randomGene = geneService.randomGene();
+      genes.add(
+        // mutateGene is called to account for trackMutatedWaves
+        geneService.mutateGene(
+          gene: randomGene,
+          wave: 0,
+        ),
+      );
     }
 
     return DNA(genes: genes);

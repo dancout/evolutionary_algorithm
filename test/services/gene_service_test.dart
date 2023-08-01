@@ -11,8 +11,11 @@ const mutatedValue = 2;
 
 void main() {
   const value = 1;
-  const gene = Gene(value: value);
-  const wave = 1;
+  const gene = Gene(
+    value: value,
+    mutatedWaves: [],
+  );
+  const wave = 2;
 
   late Random mockRandom;
 
@@ -50,6 +53,152 @@ void main() {
   });
 
   group('mutateGene', () {
+    test(
+        'will set mutatedWaves to a list on the first wave if trackMutatedWaves is true',
+        () async {
+      const randomValue = 0.1;
+      const mutationRate = 0.2;
+
+      when(() => mockRandom.nextDouble()).thenReturn(randomValue);
+
+      final testObject = FakeGeneService(
+        mutationRate: mutationRate,
+        random: mockRandom,
+        trackMutatedWaves: true,
+      );
+
+      const gene = Gene(value: value);
+      const expectedGene = Gene(
+        value: value,
+        mutatedWaves: [],
+      );
+
+      final actualGene = testObject.mutateGene(
+        gene: gene,
+        wave: 0,
+      );
+
+      expect(actualGene, expectedGene);
+    });
+
+    test(
+        'will not set mutatedWaves to a list on the first wave if trackMutatedWaves is false',
+        () async {
+      const randomValue = 0.1;
+      const mutationRate = 0.2;
+
+      when(() => mockRandom.nextDouble()).thenReturn(randomValue);
+
+      final testObject = FakeGeneService(
+        mutationRate: mutationRate,
+        random: mockRandom,
+        trackMutatedWaves: false,
+      );
+
+      const gene = Gene(value: value);
+      const expectedGene = Gene(
+        value: value,
+        mutatedWaves: null,
+      );
+
+      final actualGene = testObject.mutateGene(
+        gene: gene,
+        wave: 0,
+      );
+
+      expect(actualGene, expectedGene);
+    });
+
+    test(
+        'will add to mutatedWaves if trackMutatedWaves is true and a mutation occurs',
+        () async {
+      const randomValue = 0.1;
+      const mutationRate = 0.2;
+
+      when(() => mockRandom.nextDouble()).thenReturn(randomValue);
+
+      final testObject = FakeGeneService(
+        mutationRate: mutationRate,
+        random: mockRandom,
+        trackMutatedWaves: true,
+      );
+
+      const gene = Gene(value: value, mutatedWaves: []);
+      const expectedGene = Gene(
+        value: mutatedValue,
+        mutatedWaves: [wave],
+      );
+
+      final actualGene = testObject.mutateGene(
+        gene: gene,
+        wave: wave,
+      );
+
+      expect(actualGene, expectedGene);
+    });
+
+    test(
+        'will not add to mutatedWaves if trackMutatedWaves is false and a mutation occurs',
+        () async {
+      const randomValue = 0.1;
+      const mutationRate = 0.2;
+
+      when(() => mockRandom.nextDouble()).thenReturn(randomValue);
+
+      final testObject = FakeGeneService(
+        mutationRate: mutationRate,
+        random: mockRandom,
+        trackMutatedWaves: false,
+      );
+
+      const gene = Gene(
+        value: value,
+        mutatedWaves: null,
+      );
+      const expectedGene = Gene(
+        value: mutatedValue,
+        mutatedWaves: null,
+      );
+
+      final actualGene = testObject.mutateGene(
+        gene: gene,
+        wave: wave,
+      );
+
+      expect(actualGene, expectedGene);
+    });
+
+    test(
+        'will not add to mutatedWaves if trackMutatedWaves is true and it is the first wave',
+        () async {
+      const randomValue = 0.1;
+      const mutationRate = 0.2;
+
+      when(() => mockRandom.nextDouble()).thenReturn(randomValue);
+
+      final testObject = FakeGeneService(
+        mutationRate: mutationRate,
+        random: mockRandom,
+        trackMutatedWaves: true,
+      );
+
+      const gene = Gene(
+        value: value,
+        mutatedWaves: null,
+      );
+      const expectedGene = Gene(
+        value: value,
+        mutatedWaves: [],
+      );
+
+      final actualGene = testObject.mutateGene(
+        gene: gene,
+        wave: 0,
+      );
+
+      expect(actualGene, expectedGene);
+    });
+
     test('is called when mutationRate is higher than internal random number',
         () async {
       const randomValue = 0.1;

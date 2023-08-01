@@ -10,12 +10,12 @@ class Gene<T> extends Equatable {
   /// The encoded value for this gene.
   final T value;
 
-  // TODO: Add this into the mix as a list of waves that this gene was mutated
-  /// on. The intention is to historically show when this gene was mutated.
+  /// The list of waves that this Gene has mutated.
   final List<int>? mutatedWaves;
 
   @override
   List<Object?> get props => [
         value,
+        mutatedWaves,
       ];
 }

@@ -42,6 +42,8 @@ void main() {
   group('randomDNA', () {
     test('returns a List of Genes that is numGenes long', () async {
       when(() => mockGeneService.randomGene()).thenReturn(mockGene);
+      when(() => mockGeneService.mutateGene(gene: mockGene, wave: 0))
+          .thenReturn(mockGene);
       final List<Gene> genes = [];
       for (int i = 0; i < numGenes; i++) {
         genes.add(mockGene);
@@ -52,6 +54,8 @@ void main() {
       expect(actual, expected);
 
       verify(() => mockGeneService.randomGene()).called(numGenes);
+      verify(() => mockGeneService.mutateGene(gene: mockGene, wave: 0))
+          .called(numGenes);
     });
   });
 }
