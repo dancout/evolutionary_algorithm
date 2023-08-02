@@ -1,5 +1,6 @@
 import 'dart:math';
 
+/// Represents miscellaneous settings for evolution.
 class GeneticEvolutionConfig {
   const GeneticEvolutionConfig({
     required this.numGenes,

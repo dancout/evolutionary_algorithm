@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:genetic_evolution/models/dna.dart';
 
+/// Used for calculating the fitness score on a given strand of DNA.
 abstract class FitnessService<T> {
   /// Returns the fitnessScore calculated on the input [dna].
   double calculateScore({required DNA<T> dna}) {

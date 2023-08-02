@@ -10,6 +10,7 @@ import 'package:word_example/word_gene_service.dart';
 // Declaring the target word globally
 const target = 'HELLO WORLD';
 
+/// An example of Genetic Evolution through text.
 class WordHomePage extends StatefulWidget {
   const WordHomePage({
     super.key,

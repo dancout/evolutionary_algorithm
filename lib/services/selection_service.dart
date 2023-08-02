@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:genetic_evolution/models/entity.dart';
 import 'package:genetic_evolution/models/population.dart';
 
+/// Used for selecting parents for genetic crossover.
 class SelectionService<T> extends Equatable {
   SelectionService({
     required this.numParents,

@@ -11,6 +11,8 @@ import 'package:genetic_evolution/services/gene_service.dart';
 import 'package:genetic_evolution/services/population_service.dart';
 import 'package:genetic_evolution/services/selection_service.dart';
 
+/// Used for generating populations that evolve over time through genetic
+/// breeding and mutation.
 class GeneticEvolution<T> {
   GeneticEvolution({
     required this.geneticEvolutionConfig,

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:genetic_evolution/models/gene.dart';
 
+/// Used for manipulating Genes.
 abstract class GeneService<T> {
   GeneService({
     required this.mutationRate,

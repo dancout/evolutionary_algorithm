@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:genetic_evolution/models/entity.dart';
 
+/// Represents a collection of [entities].
 class Population<T> extends Equatable {
   const Population({
     required this.entities,

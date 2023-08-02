@@ -9,6 +9,7 @@ import 'package:genetic_evolution/models/generation.dart';
 import 'package:genetic_evolution/models/genetic_evolution_config.dart';
 import 'package:genetic_evolution/models/population.dart';
 
+/// An example of Genetic Evolution through Color Contrast.
 class ColorContrastHomePage extends StatefulWidget {
   const ColorContrastHomePage({
     super.key,

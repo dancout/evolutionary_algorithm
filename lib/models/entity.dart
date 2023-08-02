@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:genetic_evolution/models/dna.dart';
 
+/// Represents a single Entity within a larger Population.
 class Entity<T> extends Equatable {
   const Entity({
     required this.dna,

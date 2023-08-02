@@ -3,6 +3,7 @@ import 'package:genetic_evolution/models/dna.dart';
 import 'package:genetic_evolution/models/gene.dart';
 import 'package:genetic_evolution/services/gene_service.dart';
 
+/// Used to manipulate DNA.
 class DNAService<T> extends Equatable {
   DNAService({
     required this.numGenes,

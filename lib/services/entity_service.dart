@@ -8,6 +8,7 @@ import 'package:genetic_evolution/services/dna_service.dart';
 import 'package:genetic_evolution/services/fitness_service.dart';
 import 'package:genetic_evolution/services/gene_service.dart';
 
+/// Used to manipulate Entity objects.
 class EntityService<T> extends Equatable {
   EntityService({
     required this.dnaService,

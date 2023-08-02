@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+/// Represents a single Gene in a larget set of DNA.
 class Gene<T> extends Equatable {
   const Gene({
     /// The intended encoded value for this Gene.
