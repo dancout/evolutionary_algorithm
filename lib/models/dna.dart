@@ -1,12 +1,12 @@
-import 'package:equatable/equatable.dart';
-import 'package:genetic_evolution/models/gene.dart';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
-class DNA extends Equatable {
+/// Represents the DNA makeup of a single Entity.
+class DNA<T> extends Equatable {
   const DNA({
     required this.genes,
   });
 
-  final List<Gene> genes;
+  final List<Gene<T>> genes;
 
   @override
   List<Object?> get props => [

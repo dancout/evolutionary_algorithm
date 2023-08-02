@@ -1,10 +1,7 @@
-import 'dart:math';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
-import 'package:flutter/foundation.dart';
-import 'package:genetic_evolution/models/entity.dart';
-import 'package:genetic_evolution/models/population.dart';
-
-class SelectionService {
+/// Used for selecting parents for genetic crossover.
+class SelectionService<T> extends Equatable {
   SelectionService({
     required this.numParents,
     bool? canReproduceWithSelf,
@@ -12,24 +9,25 @@ class SelectionService {
   })  : canReproduceWithSelf = canReproduceWithSelf ?? true,
         random = random ?? Random();
 
-  /// Used as the internal random number generator.
-  final Random random;
-
   /// Represents the number of parents for each Entity
   final int numParents;
 
-  /// Indicates if an entity can reproduce with itself. If false, then the
-  /// entity will be removed from the selection pool after being selected the
-  /// first time.
+  /// Whether an entity can reproduce with itself.
+  ///
+  /// If false, then the entity will be removed from the selection pool after
+  /// being selected the first time.
   final bool canReproduceWithSelf;
+
+  /// Used as the internal random number generator.
+  final Random random;
 
   /// Returns a List<Entity> of parents to reproduce based on the input
   /// [population].
-  List<Entity> selectParents({
+  List<Entity<T>> selectParents({
     /// The population to select from.
-    required Population population,
+    required Population<T> population,
   }) {
-    final List<Entity> parents = [];
+    final List<Entity<T>> parents = [];
     final entities = List.of(population.entities);
 
     for (int i = 0; i < numParents; i++) {
@@ -52,8 +50,8 @@ class SelectionService {
   /// Returns an Entity from the input [entities] based on its probablility of
   /// being chosed.
   @visibleForTesting
-  Entity selectParentFromPool({
-    required List<Entity> entities,
+  Entity<T> selectParentFromPool({
+    required List<Entity<T>> entities,
   }) {
     // Calculate the normalized Fitness Score among all entities
     final normalizedScore = totalEntitiesFitnessScore(entities: entities);
@@ -92,4 +90,11 @@ class SelectionService {
         .map((e) => e.fitnessScore)
         .reduce((value, element) => value + element);
   }
+
+  @override
+  List<Object?> get props => [
+        numParents,
+        canReproduceWithSelf,
+        random,
+      ];
 }

@@ -1,15 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:genetic_evolution/models/entity.dart';
-import 'package:genetic_evolution/models/population.dart';
-import 'package:genetic_evolution/services/entity_service.dart';
-import 'package:genetic_evolution/services/population_service.dart';
-import 'package:genetic_evolution/services/selection_service.dart';
+import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
 
 void main() {
   const populationSize = 100;
+  const wave = 1;
   final Entity mockEntity = MockEntity();
 
   late EntityService mockEntityService;
@@ -28,7 +25,8 @@ void main() {
 
   group('randomPopulation', () {
     test('returns a population with correct number of entities', () async {
-      when(() => mockEntityService.randomEntity()).thenReturn(mockEntity);
+      when(() => mockEntityService.randomEntity())
+          .thenAnswer((_) async => mockEntity);
 
       final List<Entity> entities = [];
       for (int i = 0; i < populationSize; i++) {
@@ -37,7 +35,7 @@ void main() {
       final expected = Population(entities: entities);
 
       final actual =
-          testObject.randomPopulation(populationSize: populationSize);
+          await testObject.randomPopulation(populationSize: populationSize);
 
       expect(actual, expected);
 
@@ -61,8 +59,10 @@ void main() {
         entities[1],
       ];
 
-      when(() => mockEntityService.crossOver(parents: parents))
-          .thenReturn(newChild);
+      when(() => mockEntityService.crossOver(
+            parents: parents,
+            wave: wave,
+          )).thenAnswer((_) async => newChild);
 
       when(() => mockSelectionService.selectParents(
             population: population,
@@ -74,8 +74,9 @@ void main() {
         newChild,
       ]);
 
-      final actual = testObject.reproduce(
+      final actual = await testObject.reproduce(
         population: population,
+        wave: wave,
       );
 
       expect(actual, expected);
@@ -86,7 +87,10 @@ void main() {
         ),
       );
 
-      verify(() => mockEntityService.crossOver(parents: parents));
+      verify(() => mockEntityService.crossOver(
+            parents: parents,
+            wave: wave,
+          ));
     });
   });
 }

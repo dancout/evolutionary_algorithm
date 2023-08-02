@@ -1,8 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:genetic_evolution/models/dna.dart';
-import 'package:genetic_evolution/models/gene.dart';
-import 'package:genetic_evolution/services/dna_service.dart';
-import 'package:genetic_evolution/services/gene_service.dart';
+import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
@@ -11,12 +8,17 @@ void main() {
   const numGenes = 10;
   final mockGene = MockGene();
 
+  late GeneMutationService mockGeneMutationService;
   late GeneService mockGeneService;
   late DNAService testObject;
 
   setUp(() async {
+    mockGeneMutationService = MockGeneMutationService();
     mockGeneService = MockGeneService();
-    testObject = DNAService(numGenes: numGenes, geneService: mockGeneService);
+    testObject = DNAService(
+      numGenes: numGenes,
+      geneMutationService: mockGeneMutationService,
+    );
   });
 
   group('initialization', () {
@@ -24,7 +26,9 @@ void main() {
       const zeroNumGenes = 0;
 
       expect(
-        () => DNAService(numGenes: zeroNumGenes, geneService: mockGeneService),
+        () => DNAService(
+            numGenes: zeroNumGenes,
+            geneMutationService: mockGeneMutationService),
         throwsAssertionError,
       );
     });
@@ -33,7 +37,9 @@ void main() {
       const zeroNumGenes = -1;
 
       expect(
-        () => DNAService(numGenes: zeroNumGenes, geneService: mockGeneService),
+        () => DNAService(
+            numGenes: zeroNumGenes,
+            geneMutationService: mockGeneMutationService),
         throwsAssertionError,
       );
     });
@@ -41,7 +47,11 @@ void main() {
 
   group('randomDNA', () {
     test('returns a List of Genes that is numGenes long', () async {
+      when(() => mockGeneMutationService.geneService)
+          .thenReturn(mockGeneService);
       when(() => mockGeneService.randomGene()).thenReturn(mockGene);
+      when(() => mockGeneMutationService.mutateGene(gene: mockGene, wave: 0))
+          .thenReturn(mockGene);
       final List<Gene> genes = [];
       for (int i = 0; i < numGenes; i++) {
         genes.add(mockGene);
@@ -52,6 +62,8 @@ void main() {
       expect(actual, expected);
 
       verify(() => mockGeneService.randomGene()).called(numGenes);
+      verify(() => mockGeneMutationService.mutateGene(gene: mockGene, wave: 0))
+          .called(numGenes);
     });
   });
 }

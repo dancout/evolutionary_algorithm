@@ -1,87 +1,103 @@
 library genetic_evolution;
 
-import 'package:genetic_evolution/models/generation.dart';
-import 'package:genetic_evolution/models/population.dart';
-import 'package:genetic_evolution/services/dna_service.dart';
-import 'package:genetic_evolution/services/entity_service.dart';
-import 'package:genetic_evolution/services/fitness_service.dart';
-import 'package:genetic_evolution/services/gene_service.dart';
-import 'package:genetic_evolution/services/population_service.dart';
-import 'package:genetic_evolution/services/selection_service.dart';
+import 'dart:math';
 
-class GeneticEvolution {
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+
+part 'package:genetic_evolution/models/dna.dart';
+part 'package:genetic_evolution/models/entity.dart';
+part 'package:genetic_evolution/models/gene.dart';
+part 'package:genetic_evolution/models/generation.dart';
+part 'package:genetic_evolution/models/genetic_evolution_config.dart';
+part 'package:genetic_evolution/models/population.dart';
+part 'package:genetic_evolution/services/dna_service.dart';
+part 'package:genetic_evolution/services/entity_service.dart';
+part 'package:genetic_evolution/services/fitness_service.dart';
+part 'package:genetic_evolution/services/gene_mutation_service.dart';
+part 'package:genetic_evolution/services/gene_service.dart';
+part 'package:genetic_evolution/services/population_service.dart';
+part 'package:genetic_evolution/services/selection_service.dart';
+
+/// Used for generating populations that evolve over time through genetic
+/// breeding and mutation.
+class GeneticEvolution<T> {
   GeneticEvolution({
-    required this.populationSize,
-    required this.numGenes,
+    required this.geneticEvolutionConfig,
     required this.fitnessService,
     required this.geneService,
-    this.numParents = 2,
-    this.canReproduceWithSelf,
+    @visibleForTesting PopulationService<T>? populationService,
   }) {
-    final dnaService = DNAService(
-      numGenes: numGenes,
+    final geneMutationService = GeneMutationService(
+      trackMutatedWaves: geneticEvolutionConfig.trackMutatedWaves,
+      mutationRate: geneticEvolutionConfig.mutationRate,
       geneService: geneService,
+      random: geneticEvolutionConfig.random,
     );
 
-    final entityService = EntityService(
+    final dnaService = DNAService<T>(
+      numGenes: geneticEvolutionConfig.numGenes,
+      geneMutationService: geneMutationService,
+    );
+
+    final entityService = EntityService<T>(
       dnaService: dnaService,
       fitnessService: fitnessService,
-      geneService: geneService,
+      geneMutationService: geneMutationService,
+      trackParents: geneticEvolutionConfig.trackParents,
+      random: geneticEvolutionConfig.random,
     );
 
-    final selectionService = SelectionService(
-      canReproduceWithSelf: canReproduceWithSelf,
-      numParents: numParents,
+    final selectionService = SelectionService<T>(
+      canReproduceWithSelf: geneticEvolutionConfig.canReproduceWithSelf,
+      numParents: geneticEvolutionConfig.numParents,
+      random: geneticEvolutionConfig.random,
     );
 
-    populationService = PopulationService(
-      entityService: entityService,
-      selectionService: selectionService,
-    );
+    this.populationService = populationService ??
+        PopulationService<T>(
+          entityService: entityService,
+          selectionService: selectionService,
+        );
   }
 
+  /// The config object used to store setup parameters for the Genetic Evolution
+  /// algorithm.
+  final GeneticEvolutionConfig geneticEvolutionConfig;
+
   /// The service used to generate new populations for each generation
-  late final PopulationService populationService;
-
-  /// The size of each population
-  final int populationSize;
-
-  /// The number of parents for each child Entity within a Population
-  final int numParents;
-
-  /// The number of genes in each DNA sequence within each Entity
-  final int numGenes;
-
-  /// Indicates if an entity can reproduce with itself. If false, then the
-  /// entity will be removed from the selection pool after being selected the
-  /// first time.
-  final bool? canReproduceWithSelf;
+  @visibleForTesting
+  late final PopulationService<T> populationService;
 
   /// Represents the service used to calculate an entity's fitness core.
   final FitnessService fitnessService;
 
   /// The GeneService used to intialize new Genes.
-  final GeneService geneService;
+  final GeneService<T> geneService;
 
-  Generation? generation;
+  // Represents the current generation.
+  Generation<T>? _generation;
 
-  Generation nextGeneration() {
-    late Population population;
+  Future<Generation<T>> nextGeneration() async {
+    late Population<T> population;
 
-    final generation = this.generation;
+    final generation = this._generation;
+    final wave = (generation?.wave ?? -1) + 1;
     if (generation == null) {
       // Initialize
-      population =
-          populationService.randomPopulation(populationSize: populationSize);
+      population = await populationService.randomPopulation(
+        populationSize: geneticEvolutionConfig.populationSize,
+      );
     } else {
-      population = populationService.reproduce(
+      population = await populationService.reproduce(
         population: generation.population,
+        wave: wave,
       );
     }
 
-    return Generation(
+    return this._generation = Generation<T>(
       // Default to -1 so that we are actually 0 indexed
-      wave: (generation?.wave ?? -1) + 1,
+      wave: wave,
       population: population,
     );
   }
