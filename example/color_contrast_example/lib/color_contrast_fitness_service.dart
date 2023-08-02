@@ -9,7 +9,7 @@ class ColorContrastFitnessService extends FitnessService<int> {
   double get nonZeroBias => 0.01;
 
   @override
-  double scoringFunction({required DNA<int> dna}) {
+  Future<double> scoringFunction({required DNA<int> dna}) async {
     const opacity = 1.0;
     final textColorR = dna.genes[0].value;
     final textColorG = dna.genes[1].value;

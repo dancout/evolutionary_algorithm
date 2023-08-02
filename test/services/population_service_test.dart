@@ -29,7 +29,8 @@ void main() {
 
   group('randomPopulation', () {
     test('returns a population with correct number of entities', () async {
-      when(() => mockEntityService.randomEntity()).thenReturn(mockEntity);
+      when(() => mockEntityService.randomEntity())
+          .thenAnswer((_) async => mockEntity);
 
       final List<Entity> entities = [];
       for (int i = 0; i < populationSize; i++) {
@@ -38,7 +39,7 @@ void main() {
       final expected = Population(entities: entities);
 
       final actual =
-          testObject.randomPopulation(populationSize: populationSize);
+          await testObject.randomPopulation(populationSize: populationSize);
 
       expect(actual, expected);
 
@@ -65,7 +66,7 @@ void main() {
       when(() => mockEntityService.crossOver(
             parents: parents,
             wave: wave,
-          )).thenReturn(newChild);
+          )).thenAnswer((_) async => newChild);
 
       when(() => mockSelectionService.selectParents(
             population: population,
@@ -77,7 +78,7 @@ void main() {
         newChild,
       ]);
 
-      final actual = testObject.reproduce(
+      final actual = await testObject.reproduce(
         population: population,
         wave: wave,
       );

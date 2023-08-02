@@ -76,18 +76,18 @@ class GeneticEvolution<T> {
   // Represents the current generation.
   Generation<T>? _generation;
 
-  Generation<T> nextGeneration() {
+  Future<Generation<T>> nextGeneration() async {
     late Population<T> population;
 
     final generation = this._generation;
     final wave = (generation?.wave ?? -1) + 1;
     if (generation == null) {
       // Initialize
-      population = populationService.randomPopulation(
+      population = await populationService.randomPopulation(
         populationSize: geneticEvolutionConfig.populationSize,
       );
     } else {
-      population = populationService.reproduce(
+      population = await populationService.reproduce(
         population: generation.population,
         wave: wave,
       );

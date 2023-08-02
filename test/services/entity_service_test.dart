@@ -66,9 +66,9 @@ void main() {
         () async {
       when(() => mockDnaService.randomDNA()).thenReturn(mockDNA);
       when(() => mockFitnessService.calculateScore(dna: mockDNA))
-          .thenAnswer((_) => fitnessScore);
+          .thenAnswer((_) async => fitnessScore);
       final expected = Entity(dna: mockDNA, fitnessScore: fitnessScore);
-      final actual = testObject.randomEntity();
+      final actual = await testObject.randomEntity();
 
       expect(actual, expected);
 
@@ -156,7 +156,7 @@ void main() {
 
       final crossoverDna = DNA(genes: crossoverGenes);
       when(() => mockFitnessService.calculateScore(dna: crossoverDna))
-          .thenReturn(crossoverFitnessScore);
+          .thenAnswer((_) async => crossoverFitnessScore);
 
       final expected = Entity(
         dna: crossoverDna,
@@ -164,7 +164,7 @@ void main() {
         parents: null,
       );
 
-      final actual = testObject.crossOver(
+      final actual = await testObject.crossOver(
         parents: parents,
         wave: wave,
       );
@@ -258,7 +258,7 @@ void main() {
 
       final crossoverDna = DNA(genes: crossoverGenes);
       when(() => mockFitnessService.calculateScore(dna: crossoverDna))
-          .thenReturn(crossoverFitnessScore);
+          .thenAnswer((_) async => crossoverFitnessScore);
 
       final expected = Entity(
         dna: crossoverDna,
@@ -274,7 +274,7 @@ void main() {
         random: mockRandom,
       );
 
-      final actual = testObject.crossOver(
+      final actual = await testObject.crossOver(
         parents: parents,
         wave: wave,
       );

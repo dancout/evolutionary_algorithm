@@ -9,7 +9,7 @@ class WordFitnessService extends FitnessService<String> {
   double get nonZeroBias => 0.01;
 
   @override
-  double scoringFunction({required DNA<String> dna}) {
+  Future<double> scoringFunction({required DNA<String> dna}) async {
     final List<String> targetChars = target.split('');
 
     double score = 0;

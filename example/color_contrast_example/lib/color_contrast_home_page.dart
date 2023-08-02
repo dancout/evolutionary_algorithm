@@ -24,10 +24,10 @@ class ColorContrastHomePage extends StatefulWidget {
 
 class _ColorContrastHomePageState extends State<ColorContrastHomePage> {
   late GeneticEvolution<int> geneticEvolution;
-  late Generation<int> generation;
+  Generation<int>? generation;
   bool isPlaying = false;
   int? targetWaveFound;
-  late double targetScore;
+  double? targetScore;
   double allTimeTopScore = 0.0;
   static const populationSize = 150;
   // 3 parents can contribute to the reproduced Entity
@@ -48,16 +48,6 @@ class _ColorContrastHomePageState extends State<ColorContrastHomePage> {
     final colorContrastFitnessService = ColorContrastFitnessService();
     final colorContrastGeneService = ColorContrastGeneService();
 
-    targetScore = colorContrastFitnessService.calculateScore(
-        dna: DNA(genes: [
-      Gene(value: Colors.black.red),
-      Gene(value: Colors.black.green),
-      Gene(value: Colors.black.blue),
-      Gene(value: Colors.white.red),
-      Gene(value: Colors.white.green),
-      Gene(value: Colors.white.blue),
-    ]));
-
     final geneticEolutionConfig = GeneticEvolutionConfig(
       numGenes: numGenes,
       numParents: numParents,
@@ -74,19 +64,46 @@ class _ColorContrastHomePageState extends State<ColorContrastHomePage> {
       geneService: colorContrastGeneService,
     );
 
-    // Initialize the first generation
-    generation = geneticEvolution.nextGeneration();
+    Future.wait(
+      [
+        colorContrastFitnessService
+            .calculateScore(
+              dna: DNA(
+                genes: [
+                  Gene(value: Colors.black.red),
+                  Gene(value: Colors.black.green),
+                  Gene(value: Colors.black.blue),
+                  Gene(value: Colors.white.red),
+                  Gene(value: Colors.white.green),
+                  Gene(value: Colors.white.blue),
+                ],
+              ),
+            )
+            .then((value) => targetScore = value),
+        // Initialize the first generation
+        geneticEvolution.nextGeneration().then((value) => generation = value),
+      ],
+    ).then((value) {
+      setState(() {});
+    });
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final generation = this.generation;
+    final targetScore = this.targetScore;
+    if (generation == null || targetScore == null) {
+      return const CircularProgressIndicator();
+    }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       if (isPlaying) {
-        setState(() {
-          // Move on to the next generation
-          generation = geneticEvolution.nextGeneration();
+        // Move on to the next generation
+        geneticEvolution.nextGeneration().then((value) {
+          setState(() {
+            this.generation = value;
+          });
         });
       }
     });
@@ -188,8 +205,10 @@ class _ColorContrastHomePageState extends State<ColorContrastHomePage> {
               isPlaying = !isPlaying;
             });
           } else {
-            setState(() {
-              generation = geneticEvolution.nextGeneration();
+            geneticEvolution.nextGeneration().then((value) {
+              setState(() {
+                this.generation = value;
+              });
             });
           }
         },

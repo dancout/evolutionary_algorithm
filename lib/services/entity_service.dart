@@ -34,20 +34,20 @@ class EntityService<T> extends Equatable {
   /// generation.
   final bool trackParents;
 
-  Entity<T> randomEntity() {
+  Future<Entity<T>> randomEntity() async {
     final randomDNA = dnaService.randomDNA();
     return Entity<T>(
       dna: randomDNA,
-      fitnessScore: fitnessService.calculateScore(dna: randomDNA),
+      fitnessScore: await fitnessService.calculateScore(dna: randomDNA),
     );
   }
 
   /// Returns an Entity created by randomly crossing over the genes present
   /// within the input [parents].
-  Entity<T> crossOver({
+  Future<Entity<T>> crossOver({
     required List<Entity<T>> parents,
     required int wave,
-  }) {
+  }) async {
     // Initialize your list of Genes
     final List<Gene<T>> crossedOverGenes = [];
     // Declare the number of parents
@@ -78,7 +78,7 @@ class EntityService<T> extends Equatable {
     // Declare the new DNA
     final dna = DNA<T>(genes: crossedOverGenes);
     // Declare the fitness score of this new DNA
-    final fitnessScore = fitnessService.calculateScore(dna: dna);
+    final fitnessScore = await fitnessService.calculateScore(dna: dna);
 
     // Return the newly created Entity
     return Entity(

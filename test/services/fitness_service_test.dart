@@ -16,7 +16,7 @@ void main() {
   group('calculateScore', () {
     test('will add nonZeroBias to internally calculated score', () async {
       const expected = score + nonZeroBiasVal;
-      final actual = testObject.calculateScore(dna: MockDNA());
+      final actual = await testObject.calculateScore(dna: MockDNA());
 
       expect(actual, expected);
     });
@@ -28,7 +28,7 @@ class FakeFitnessService extends FitnessService {
   double get nonZeroBias => nonZeroBiasVal;
 
   @override
-  double scoringFunction({required DNA dna}) {
+  Future<double> scoringFunction({required DNA dna}) async {
     return score;
   }
 }

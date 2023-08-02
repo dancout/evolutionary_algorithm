@@ -95,12 +95,12 @@ void main() {
 
       when(() => mockPopulationService.randomPopulation(
             populationSize: populationSize,
-          )).thenReturn(firstPopulation);
+          )).thenAnswer((_) async => firstPopulation);
 
       when(() => mockPopulationService.reproduce(
             population: firstPopulation,
             wave: 1,
-          )).thenReturn(secondPopulation);
+          )).thenAnswer((_) async => secondPopulation);
 
       final testObject = GeneticEvolution(
         geneticEvolutionConfig: geneticEvolutionConfig,
@@ -114,7 +114,7 @@ void main() {
         wave: 0,
         population: firstPopulation,
       );
-      final actualFirstGeneration = testObject.nextGeneration();
+      final actualFirstGeneration = await testObject.nextGeneration();
 
       expect(actualFirstGeneration, expectedFirstGeneration);
       verify(() => mockPopulationService.randomPopulation(
@@ -127,7 +127,7 @@ void main() {
         wave: 1,
         population: secondPopulation,
       );
-      final actualSecondGeneration = testObject.nextGeneration();
+      final actualSecondGeneration = await testObject.nextGeneration();
 
       expect(actualSecondGeneration, expectedSecondGeneration);
       verify(() => mockPopulationService.reproduce(

@@ -25,7 +25,7 @@ class WordHomePage extends StatefulWidget {
 
 class _WordHomePageState extends State<WordHomePage> {
   late GeneticEvolution<String> geneticEvolution;
-  late Generation<String> generation;
+  Generation<String>? generation;
   bool isPlaying = false;
   int? waveTargetFound;
 
@@ -51,19 +51,28 @@ class _WordHomePageState extends State<WordHomePage> {
     );
 
     // Initialize the first generation
-    generation = geneticEvolution.nextGeneration();
+    geneticEvolution.nextGeneration().then((value) {
+      setState(() {
+        generation = value;
+      });
+    });
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final generation = this.generation;
+    if (generation == null) {
+      return const CircularProgressIndicator();
+    }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       if (isPlaying) {
         await Future.delayed(const Duration(milliseconds: 100));
-        setState(() {
-          // Move on to the next generation
-          generation = geneticEvolution.nextGeneration();
+        geneticEvolution.nextGeneration().then((value) {
+          setState(() {
+            this.generation = value;
+          });
         });
       }
     });
@@ -154,8 +163,10 @@ class _WordHomePageState extends State<WordHomePage> {
               isPlaying = !isPlaying;
             });
           } else {
-            setState(() {
-              generation = geneticEvolution.nextGeneration();
+            geneticEvolution.nextGeneration().then((value) {
+              setState(() {
+                this.generation = value;
+              });
             });
           }
         },

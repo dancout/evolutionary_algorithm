@@ -19,13 +19,13 @@ class PopulationService<T> extends Equatable {
 
   /// Returns a randomly initialized population based on the given
   /// [populationSize].
-  Population<T> randomPopulation({
+  Future<Population<T>> randomPopulation({
     required int populationSize,
-  }) {
+  }) async {
     final List<Entity<T>> entities = [];
 
     for (int i = 0; i < populationSize; i++) {
-      entities.add(entityService.randomEntity());
+      entities.add(await entityService.randomEntity());
     }
 
     return Population(entities: entities);
@@ -33,10 +33,10 @@ class PopulationService<T> extends Equatable {
 
   /// Returns a new Population of children that have been crossed over from
   /// [numParents] number of parents.
-  Population<T> reproduce({
+  Future<Population<T>> reproduce({
     required Population<T> population,
     required int wave,
-  }) {
+  }) async {
     // Declare the list of new children
     final List<Entity<T>> children = [];
 
@@ -47,7 +47,7 @@ class PopulationService<T> extends Equatable {
       );
 
       // Create the child from the given parents
-      final child = entityService.crossOver(
+      final child = await entityService.crossOver(
         parents: parents,
         // TODO: I would love to get this from a provided value of some sort
         wave: wave,
