@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:genetic_evolution/genetic_evolution.dart';
-import 'package:genetic_evolution/models/gene.dart';
 
 class ColorContrastGeneService extends GeneService<int> {
   ColorContrastGeneService();

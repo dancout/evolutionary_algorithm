@@ -2,14 +2,6 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:genetic_evolution/genetic_evolution.dart';
-import 'package:genetic_evolution/models/generation.dart';
-import 'package:genetic_evolution/models/genetic_evolution_config.dart';
-import 'package:genetic_evolution/models/population.dart';
-import 'package:genetic_evolution/services/dna_service.dart';
-import 'package:genetic_evolution/services/entity_service.dart';
-import 'package:genetic_evolution/services/fitness_service.dart';
-import 'package:genetic_evolution/services/population_service.dart';
-import 'package:genetic_evolution/services/selection_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'mocks.dart';

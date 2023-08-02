@@ -4,18 +4,20 @@ import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:genetic_evolution/models/gene.dart';
-import 'package:genetic_evolution/models/generation.dart';
-import 'package:genetic_evolution/models/genetic_evolution_config.dart';
-import 'package:genetic_evolution/models/population.dart';
-import 'package:genetic_evolution/services/dna_service.dart';
-import 'package:genetic_evolution/services/entity_service.dart';
-import 'package:genetic_evolution/services/fitness_service.dart';
-import 'package:genetic_evolution/services/population_service.dart';
-import 'package:genetic_evolution/services/selection_service.dart';
 
+part 'package:genetic_evolution/models/dna.dart';
+part 'package:genetic_evolution/models/entity.dart';
+part 'package:genetic_evolution/models/gene.dart';
+part 'package:genetic_evolution/models/generation.dart';
+part 'package:genetic_evolution/models/genetic_evolution_config.dart';
+part 'package:genetic_evolution/models/population.dart';
+part 'package:genetic_evolution/services/dna_service.dart';
+part 'package:genetic_evolution/services/entity_service.dart';
+part 'package:genetic_evolution/services/fitness_service.dart';
 part 'package:genetic_evolution/services/gene_mutation_service.dart';
 part 'package:genetic_evolution/services/gene_service.dart';
+part 'package:genetic_evolution/services/population_service.dart';
+part 'package:genetic_evolution/services/selection_service.dart';
 
 /// Used for generating populations that evolve over time through genetic
 /// breeding and mutation.

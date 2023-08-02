@@ -1,5 +1,4 @@
-import 'package:flutter/foundation.dart';
-import 'package:genetic_evolution/models/dna.dart';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Used for calculating the fitness score on a given strand of DNA.
 abstract class FitnessService<T> {

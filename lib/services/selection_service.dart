@@ -1,9 +1,4 @@
-import 'dart:math';
-
-import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
-import 'package:genetic_evolution/models/entity.dart';
-import 'package:genetic_evolution/models/population.dart';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Used for selecting parents for genetic crossover.
 class SelectionService<T> extends Equatable {

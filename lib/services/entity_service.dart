@@ -1,12 +1,4 @@
-import 'dart:math';
-
-import 'package:equatable/equatable.dart';
-import 'package:genetic_evolution/genetic_evolution.dart';
-import 'package:genetic_evolution/models/dna.dart';
-import 'package:genetic_evolution/models/entity.dart';
-import 'package:genetic_evolution/models/gene.dart';
-import 'package:genetic_evolution/services/dna_service.dart';
-import 'package:genetic_evolution/services/fitness_service.dart';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Used to manipulate Entity objects.
 class EntityService<T> extends Equatable {

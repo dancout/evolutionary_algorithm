@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:genetic_evolution/models/gene.dart';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Represents the DNA makeup of a single Entity.
 class DNA<T> extends Equatable {

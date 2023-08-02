@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:genetic_evolution/genetic_evolution.dart';
-import 'package:genetic_evolution/models/gene.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';

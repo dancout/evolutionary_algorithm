@@ -1,14 +1,6 @@
 import 'dart:math';
 
 import 'package:genetic_evolution/genetic_evolution.dart';
-import 'package:genetic_evolution/models/dna.dart';
-import 'package:genetic_evolution/models/entity.dart';
-import 'package:genetic_evolution/models/gene.dart';
-import 'package:genetic_evolution/services/dna_service.dart';
-import 'package:genetic_evolution/services/entity_service.dart';
-import 'package:genetic_evolution/services/fitness_service.dart';
-import 'package:genetic_evolution/services/population_service.dart';
-import 'package:genetic_evolution/services/selection_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockGeneService extends Mock implements GeneService {}

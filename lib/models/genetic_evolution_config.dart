@@ -1,4 +1,4 @@
-import 'dart:math';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Represents miscellaneous settings for evolution.
 class GeneticEvolutionConfig {

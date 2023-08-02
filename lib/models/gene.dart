@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Represents a single Gene in a larget set of DNA.
 class Gene<T> extends Equatable {

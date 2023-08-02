@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:genetic_evolution/models/entity.dart';
-import 'package:genetic_evolution/models/population.dart';
+import 'package:genetic_evolution/genetic_evolution.dart';
 
 import '../mocks.dart';
 

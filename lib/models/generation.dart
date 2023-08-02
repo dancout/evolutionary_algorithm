@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:genetic_evolution/models/population.dart';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Represents a [population] of entities created within the same [wave].
 class Generation<T> extends Equatable {

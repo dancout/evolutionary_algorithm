@@ -1,7 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:genetic_evolution/genetic_evolution.dart';
-import 'package:genetic_evolution/models/dna.dart';
-import 'package:genetic_evolution/models/gene.dart';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Used to manipulate DNA.
 class DNAService<T> extends Equatable {

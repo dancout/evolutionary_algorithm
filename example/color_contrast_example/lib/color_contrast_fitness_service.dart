@@ -1,8 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:genetic_evolution/models/dna.dart';
-import 'package:genetic_evolution/services/fitness_service.dart';
+import 'package:genetic_evolution/genetic_evolution.dart';
 
 class ColorContrastFitnessService extends FitnessService<int> {
   @override

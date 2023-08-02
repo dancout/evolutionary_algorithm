@@ -1,8 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:genetic_evolution/genetic_evolution.dart';
-import 'package:genetic_evolution/models/dna.dart';
-import 'package:genetic_evolution/models/gene.dart';
-import 'package:genetic_evolution/services/dna_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';

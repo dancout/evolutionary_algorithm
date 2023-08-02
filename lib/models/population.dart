@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:genetic_evolution/models/entity.dart';
+part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Represents a collection of [entities].
 class Population<T> extends Equatable {
