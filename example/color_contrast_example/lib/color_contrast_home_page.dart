@@ -34,9 +34,10 @@ class _ColorContrastHomePageState extends State<ColorContrastHomePage> {
   static const numParents = 3;
   // A parent cannot be picked twice for the same child Entity
   static const canReproduceWithSelf = false;
-  // We should keep track of an entity's parents from the previous generation.
+  // Whether we should keep track of an entity's parents from the previous
+  // generation.
   static const trackParents = true;
-  // We should keep track of which wave a particular gene was mutated.
+  // Whether we should keep track of which wave a particular gene was mutated.
   static const trackMutatedWaves = true;
 
   @override
