@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
+import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:genetic_evolution/models/dna.dart';
 import 'package:genetic_evolution/models/gene.dart';
-import 'package:genetic_evolution/services/gene_service.dart';
 
 /// Used to manipulate DNA.
 class DNAService<T> extends Equatable {
   DNAService({
     required this.numGenes,
-    required this.geneService,
+    required this.geneMutationService,
   }) {
     assert(numGenes > 0);
   }
@@ -15,18 +15,18 @@ class DNAService<T> extends Equatable {
   /// The number of Genes required for a DNA sequence.
   final int numGenes;
 
-  /// The GeneService used to intialize new Genes.
-  final GeneService<T> geneService;
+  /// Used to manipulate genes.
+  final GeneMutationService<T> geneMutationService;
 
   /// Returns a randomly intialized DNA object.
   DNA<T> randomDNA() {
     final List<Gene<T>> genes = <Gene<T>>[];
 
     for (int i = 0; i < numGenes; i++) {
-      final randomGene = geneService.randomGene();
+      final randomGene = geneMutationService.geneService.randomGene();
       genes.add(
         // mutateGene is called to account for trackMutatedWaves
-        geneService.mutateGene(
+        geneMutationService.mutateGene(
           gene: randomGene,
           wave: 0,
         ),
@@ -39,6 +39,6 @@ class DNAService<T> extends Equatable {
   @override
   List<Object?> get props => [
         numGenes,
-        geneService,
+        geneMutationService,
       ];
 }

@@ -1,19 +1,19 @@
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
+import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:genetic_evolution/models/dna.dart';
 import 'package:genetic_evolution/models/entity.dart';
 import 'package:genetic_evolution/models/gene.dart';
 import 'package:genetic_evolution/services/dna_service.dart';
 import 'package:genetic_evolution/services/fitness_service.dart';
-import 'package:genetic_evolution/services/gene_service.dart';
 
 /// Used to manipulate Entity objects.
 class EntityService<T> extends Equatable {
   EntityService({
     required this.dnaService,
     required this.fitnessService,
-    required this.geneService,
+    required this.geneMutationService,
     required this.trackParents,
     Random? random,
   }) : random = random ?? Random();
@@ -25,7 +25,7 @@ class EntityService<T> extends Equatable {
   final FitnessService fitnessService;
 
   /// Represents the service used when mutating genes.
-  final GeneService<T> geneService;
+  final GeneMutationService<T> geneMutationService;
 
   /// Used as the internal random number generator.
   final Random random;
@@ -64,7 +64,7 @@ class EntityService<T> extends Equatable {
       final parentalGene = parents[randIndices[i]].dna.genes[i];
 
       // Potentially mutate this gene
-      final potentiallyMutatedGene = geneService.mutateGene(
+      final potentiallyMutatedGene = geneMutationService.mutateGene(
         gene: parentalGene,
         wave: wave,
       );
@@ -92,7 +92,7 @@ class EntityService<T> extends Equatable {
   List<Object?> get props => [
         dnaService,
         fitnessService,
-        geneService,
+        geneMutationService,
         random,
         trackParents,
       ];

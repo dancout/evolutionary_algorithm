@@ -35,12 +35,13 @@ class _WordHomePageState extends State<WordHomePage> {
     const populationSize = 30;
     const mutationRate = 0.05; // 5%
     final wordFitnessService = WordFitnessService();
-    final wordGeneService = WordGeneService(mutationRate: mutationRate);
+    final wordGeneService = WordGeneService();
 
     final GeneticEvolutionConfig geneticEvolutionConfig =
         GeneticEvolutionConfig(
       numGenes: numGenes,
       populationSize: populationSize,
+      mutationRate: mutationRate,
     );
 
     geneticEvolution = GeneticEvolution(

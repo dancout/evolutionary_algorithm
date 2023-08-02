@@ -54,11 +54,11 @@ void main() {
         entityService: EntityService(
           dnaService: DNAService(
             numGenes: geneticEvolutionConfig.numGenes,
-            geneService: mockGeneService,
+            geneMutationService: mockGeneService,
           ),
           random: mockRandom,
           fitnessService: mockFitnessService,
-          geneService: mockGeneService,
+          geneMutationService: mockGeneService,
           trackParents: geneticEvolutionConfig.trackParents,
         ),
         selectionService: SelectionService(

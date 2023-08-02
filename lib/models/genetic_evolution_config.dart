@@ -2,17 +2,29 @@ import 'dart:math';
 
 /// Represents miscellaneous settings for evolution.
 class GeneticEvolutionConfig {
-  const GeneticEvolutionConfig({
+  GeneticEvolutionConfig({
     required this.numGenes,
+    required this.mutationRate,
     this.populationSize = 100,
     this.numParents = 2,
     this.trackParents = false,
     this.canReproduceWithSelf = true,
+    this.trackMutatedWaves = false,
     this.random,
-  });
+  }) {
+    assert(
+      mutationRate >= 0.toDouble() && mutationRate <= 1.toDouble(),
+      'mutationRate must be between 0 and 1, inclusively',
+    );
+  }
 
   /// The number of genes in each DNA sequence within each Entity
   final int numGenes;
+
+  /// A value between 0 and 1, inclusively, that represents if this gene
+  /// should mutate its value. A value of 0 will never mutate and a value of 1
+  /// will always mutate.
+  final double mutationRate;
 
   /// The size of each population
   final int populationSize;
@@ -28,6 +40,10 @@ class GeneticEvolutionConfig {
   /// entity will be removed from the selection pool after being selected the
   /// first time.
   final bool canReproduceWithSelf;
+
+  /// Represents whether or not to track the list of waves this gene has been
+  /// mutated.
+  final bool trackMutatedWaves;
 
   /// Used as the internal random number generator.
   final Random? random;

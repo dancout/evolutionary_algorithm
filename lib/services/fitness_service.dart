@@ -15,9 +15,11 @@ abstract class FitnessService<T> {
   @visibleForTesting
   double scoringFunction({required DNA<T> dna});
 
-  /// This value will be added to each fitnessScore with the intention of
-  /// avoiding any 0 values. If your fitness function accounts for this
-  /// scenario, or negative or 0 values are acceptable, mark this value as 0.
+  /// Added to each fitnessScore.
+  ///
+  /// The intention is to avoid any 0 values. If your fitness function accounts
+  /// for this scenario, or negative or 0 values are acceptable, mark this
+  /// value as 0.
   @visibleForTesting
   double get nonZeroBias;
 }

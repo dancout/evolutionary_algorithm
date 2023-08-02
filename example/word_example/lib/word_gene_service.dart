@@ -1,11 +1,12 @@
+import 'dart:math';
+
+import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:genetic_evolution/models/gene.dart';
-import 'package:genetic_evolution/services/gene_service.dart';
 
 class WordGeneService extends GeneService<String> {
-  WordGeneService({
-    required super.mutationRate,
-    super.random,
-  });
+  WordGeneService();
+
+  final Random random = Random();
 
   @override
   mutateValue({value}) {

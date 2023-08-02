@@ -1,12 +1,12 @@
+import 'dart:math';
+
+import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:genetic_evolution/models/gene.dart';
-import 'package:genetic_evolution/services/gene_service.dart';
 
 class ColorContrastGeneService extends GeneService<int> {
-  ColorContrastGeneService({
-    required super.mutationRate,
-    super.trackMutatedWaves,
-    super.random,
-  });
+  ColorContrastGeneService();
+
+  final Random random = Random();
 
   @override
   int mutateValue({int? value}) {

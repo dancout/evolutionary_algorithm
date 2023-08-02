@@ -14,16 +14,17 @@ class SelectionService<T> extends Equatable {
   })  : canReproduceWithSelf = canReproduceWithSelf ?? true,
         random = random ?? Random();
 
-  /// Used as the internal random number generator.
-  final Random random;
-
   /// Represents the number of parents for each Entity
   final int numParents;
 
-  /// Indicates if an entity can reproduce with itself. If false, then the
-  /// entity will be removed from the selection pool after being selected the
-  /// first time.
+  /// Whether an entity can reproduce with itself.
+  ///
+  /// If false, then the entity will be removed from the selection pool after
+  /// being selected the first time.
   final bool canReproduceWithSelf;
+
+  /// Used as the internal random number generator.
+  final Random random;
 
   /// Returns a List<Entity> of parents to reproduce based on the input
   /// [population].
@@ -98,7 +99,7 @@ class SelectionService<T> extends Equatable {
   @override
   List<Object?> get props => [
         numParents,
-        random,
         canReproduceWithSelf,
+        random,
       ];
 }

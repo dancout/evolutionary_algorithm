@@ -46,10 +46,7 @@ class _ColorContrastHomePageState extends State<ColorContrastHomePage> {
     const mutationRate = 0.40;
 
     final colorContrastFitnessService = ColorContrastFitnessService();
-    final colorContrastGeneService = ColorContrastGeneService(
-      mutationRate: mutationRate,
-      trackMutatedWaves: trackMutatedWaves,
-    );
+    final colorContrastGeneService = ColorContrastGeneService();
 
     targetScore = colorContrastFitnessService.calculateScore(
         dna: DNA(genes: [
@@ -61,12 +58,14 @@ class _ColorContrastHomePageState extends State<ColorContrastHomePage> {
       Gene(value: Colors.white.blue),
     ]));
 
-    const GeneticEvolutionConfig geneticEolutionConfig = GeneticEvolutionConfig(
+    final geneticEolutionConfig = GeneticEvolutionConfig(
       numGenes: numGenes,
       numParents: numParents,
       populationSize: populationSize,
       canReproduceWithSelf: canReproduceWithSelf,
       trackParents: trackParents,
+      mutationRate: mutationRate,
+      trackMutatedWaves: trackMutatedWaves,
     );
 
     geneticEvolution = GeneticEvolution(
