@@ -8,7 +8,6 @@ import 'package:genetic_evolution/models/population.dart';
 import 'package:genetic_evolution/services/dna_service.dart';
 import 'package:genetic_evolution/services/entity_service.dart';
 import 'package:genetic_evolution/services/fitness_service.dart';
-import 'package:genetic_evolution/services/gene_service.dart';
 import 'package:genetic_evolution/services/population_service.dart';
 import 'package:genetic_evolution/services/selection_service.dart';
 import 'package:mocktail/mocktail.dart';
@@ -21,6 +20,8 @@ void main() {
   const populationSize = 50;
   const trackParents = true;
   const canReproduceWithSelf = true;
+  const mutationRate = 0.4;
+  const trackMutatedWaves = true;
   late FitnessService mockFitnessService;
   late GeneService mockGeneService;
   late Random mockRandom;
@@ -39,7 +40,9 @@ void main() {
       canReproduceWithSelf: canReproduceWithSelf,
       numParents: numParents,
       populationSize: populationSize,
+      mutationRate: mutationRate,
       random: mockRandom,
+      trackMutatedWaves: trackMutatedWaves,
     );
   });
 
@@ -50,15 +53,21 @@ void main() {
         fitnessService: mockFitnessService,
         geneService: mockGeneService,
       );
+      final geneMutationService = GeneMutationService(
+        trackMutatedWaves: trackMutatedWaves,
+        mutationRate: mutationRate,
+        geneService: mockGeneService,
+        random: mockRandom,
+      );
       final expected = PopulationService(
         entityService: EntityService(
           dnaService: DNAService(
             numGenes: geneticEvolutionConfig.numGenes,
-            geneMutationService: mockGeneService,
+            geneMutationService: geneMutationService,
           ),
           random: mockRandom,
           fitnessService: mockFitnessService,
-          geneMutationService: mockGeneService,
+          geneMutationService: geneMutationService,
           trackParents: geneticEvolutionConfig.trackParents,
         ),
         selectionService: SelectionService(

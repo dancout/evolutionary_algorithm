@@ -1,7 +1,7 @@
 part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Used for mutating a given gene.
-class GeneMutationService<T> {
+class GeneMutationService<T> extends Equatable {
   @visibleForTesting
   GeneMutationService({
     required this.trackMutatedWaves,
@@ -75,4 +75,12 @@ class GeneMutationService<T> {
       mutatedWaves: mutatedWaves,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        trackMutatedWaves,
+        mutationRate,
+        geneService,
+        random,
+      ];
 }

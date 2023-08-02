@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:genetic_evolution/models/gene.dart';
-import 'package:genetic_evolution/services/gene_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
@@ -28,7 +28,11 @@ void main() {
       const mutationRate = -1.0;
 
       expect(
-        () => FakeGeneService(mutationRate: mutationRate),
+        () => GeneMutationService(
+          trackMutatedWaves: true,
+          mutationRate: mutationRate,
+          geneService: FakeGeneService(),
+        ),
         throwsAssertionError,
       );
     });
@@ -37,7 +41,11 @@ void main() {
       const mutationRate = 1.1;
 
       expect(
-        () => FakeGeneService(mutationRate: mutationRate),
+        () => GeneMutationService(
+          trackMutatedWaves: true,
+          mutationRate: mutationRate,
+          geneService: FakeGeneService(),
+        ),
         throwsAssertionError,
       );
     });
@@ -46,7 +54,11 @@ void main() {
       double mutationRate = 0.0;
 
       while (mutationRate <= 1.0) {
-        () => FakeGeneService(mutationRate: mutationRate); // Expect no errors
+        () => GeneMutationService(
+              trackMutatedWaves: true,
+              mutationRate: mutationRate,
+              geneService: FakeGeneService(),
+            ); // Expect no errors
         mutationRate += 0.1;
       }
     });
@@ -61,10 +73,11 @@ void main() {
 
       when(() => mockRandom.nextDouble()).thenReturn(randomValue);
 
-      final testObject = FakeGeneService(
+      final testObject = GeneMutationService(
         mutationRate: mutationRate,
         random: mockRandom,
         trackMutatedWaves: true,
+        geneService: FakeGeneService(),
       );
 
       const gene = Gene(value: value);
@@ -89,10 +102,11 @@ void main() {
 
       when(() => mockRandom.nextDouble()).thenReturn(randomValue);
 
-      final testObject = FakeGeneService(
+      final testObject = GeneMutationService(
         mutationRate: mutationRate,
         random: mockRandom,
         trackMutatedWaves: false,
+        geneService: FakeGeneService(),
       );
 
       const gene = Gene(value: value);
@@ -117,10 +131,11 @@ void main() {
 
       when(() => mockRandom.nextDouble()).thenReturn(randomValue);
 
-      final testObject = FakeGeneService(
+      final testObject = GeneMutationService(
         mutationRate: mutationRate,
         random: mockRandom,
         trackMutatedWaves: true,
+        geneService: FakeGeneService(),
       );
 
       const gene = Gene(value: value, mutatedWaves: []);
@@ -145,10 +160,11 @@ void main() {
 
       when(() => mockRandom.nextDouble()).thenReturn(randomValue);
 
-      final testObject = FakeGeneService(
+      final testObject = GeneMutationService(
         mutationRate: mutationRate,
         random: mockRandom,
         trackMutatedWaves: false,
+        geneService: FakeGeneService(),
       );
 
       const gene = Gene(
@@ -176,10 +192,11 @@ void main() {
 
       when(() => mockRandom.nextDouble()).thenReturn(randomValue);
 
-      final testObject = FakeGeneService(
+      final testObject = GeneMutationService(
         mutationRate: mutationRate,
         random: mockRandom,
         trackMutatedWaves: true,
+        geneService: FakeGeneService(),
       );
 
       const gene = Gene(
@@ -206,9 +223,11 @@ void main() {
 
       when(() => mockRandom.nextDouble()).thenReturn(randomValue);
 
-      final testObject = FakeGeneService(
+      final testObject = GeneMutationService(
         mutationRate: mutationRate,
         random: mockRandom,
+        geneService: FakeGeneService(),
+        trackMutatedWaves: false,
       );
 
       final actualValue = testObject
@@ -228,10 +247,11 @@ void main() {
 
       when(() => mockRandom.nextDouble()).thenReturn(randomValue);
 
-      final testObject = FakeGeneService(
+      final testObject = GeneMutationService(
         mutationRate: mutationRate,
         trackMutatedWaves: true,
         random: mockRandom,
+        geneService: FakeGeneService(),
       );
 
       const expected = Gene(
@@ -255,9 +275,11 @@ void main() {
 
       when(() => mockRandom.nextDouble()).thenReturn(randomValue);
 
-      final testObject = FakeGeneService(
+      final testObject = GeneMutationService(
         mutationRate: mutationRate,
         random: mockRandom,
+        geneService: FakeGeneService(),
+        trackMutatedWaves: false,
       );
 
       final actualValue = testObject
@@ -273,14 +295,10 @@ void main() {
 }
 
 class FakeGeneService extends GeneService<int> {
-  FakeGeneService({
-    required super.mutationRate,
-    super.trackMutatedWaves,
-    super.random,
-  });
+  FakeGeneService();
 
   @override
-  mutateValue({value}) {
+  int mutateValue({int? value}) {
     return mutatedValue;
   }
 

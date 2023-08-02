@@ -2,6 +2,7 @@ library genetic_evolution;
 
 import 'dart:math';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:genetic_evolution/models/gene.dart';
 import 'package:genetic_evolution/models/generation.dart';
@@ -29,6 +30,7 @@ class GeneticEvolution<T> {
       trackMutatedWaves: geneticEvolutionConfig.trackMutatedWaves,
       mutationRate: geneticEvolutionConfig.mutationRate,
       geneService: geneService,
+      random: geneticEvolutionConfig.random,
     );
 
     final dnaService = DNAService<T>(
@@ -71,12 +73,13 @@ class GeneticEvolution<T> {
   /// The GeneService used to intialize new Genes.
   final GeneService<T> geneService;
 
-  Generation<T>? generation;
+  // Represents the current generation.
+  Generation<T>? _generation;
 
   Generation<T> nextGeneration() {
     late Population<T> population;
 
-    final generation = this.generation;
+    final generation = this._generation;
     final wave = (generation?.wave ?? -1) + 1;
     if (generation == null) {
       // Initialize
@@ -90,7 +93,7 @@ class GeneticEvolution<T> {
       );
     }
 
-    return this.generation = Generation<T>(
+    return this._generation = Generation<T>(
       // Default to -1 so that we are actually 0 indexed
       wave: wave,
       population: population,

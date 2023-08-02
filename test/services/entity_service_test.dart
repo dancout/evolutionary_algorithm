@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:genetic_evolution/models/dna.dart';
 import 'package:genetic_evolution/models/entity.dart';
 import 'package:genetic_evolution/models/gene.dart';
 import 'package:genetic_evolution/services/dna_service.dart';
 import 'package:genetic_evolution/services/entity_service.dart';
 import 'package:genetic_evolution/services/fitness_service.dart';
-import 'package:genetic_evolution/services/gene_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../mocks.dart';
@@ -38,6 +38,7 @@ void main() {
   late DNAService mockDnaService;
   late FitnessService mockFitnessService;
   late GeneService mockGeneService;
+  late GeneMutationService mockGeneMutationService;
   late Random mockRandom;
 
   late EntityService testObject;
@@ -46,19 +47,22 @@ void main() {
     mockDnaService = MockDNAService();
     mockFitnessService = MockFitnessService();
     mockGeneService = MockGeneService();
+    mockGeneMutationService = MockGeneMutationService();
     mockRandom = MockRandom();
     testObject = EntityService(
       trackParents: trackParents,
       dnaService: mockDnaService,
       fitnessService: mockFitnessService,
-      geneService: mockGeneService,
+      geneMutationService: mockGeneMutationService,
       random: mockRandom,
     );
+
+    when(() => mockGeneMutationService.geneService).thenReturn(mockGeneService);
   });
 
   group('randomEntity', () {
     test(
-        'calls proper services to createa random DNA object and score its fitness',
+        'calls proper services to create a random DNA object and score its fitness',
         () async {
       when(() => mockDnaService.randomDNA()).thenReturn(mockDNA);
       when(() => mockFitnessService.calculateScore(dna: mockDNA))
@@ -144,7 +148,7 @@ void main() {
       );
 
       for (var crossoverGene in crossoverGenes) {
-        when(() => mockGeneService.mutateGene(
+        when(() => mockGeneMutationService.mutateGene(
               gene: crossoverGene,
               wave: wave,
             )).thenReturn(crossoverGene);
@@ -167,7 +171,7 @@ void main() {
       expect(actual, expected);
 
       for (var crossoverGene in crossoverGenes) {
-        verify(() => mockGeneService.mutateGene(
+        verify(() => mockGeneMutationService.mutateGene(
               gene: crossoverGene,
               wave: wave,
             ));
@@ -246,7 +250,7 @@ void main() {
       );
 
       for (var crossoverGene in crossoverGenes) {
-        when(() => mockGeneService.mutateGene(
+        when(() => mockGeneMutationService.mutateGene(
               gene: crossoverGene,
               wave: wave,
             )).thenReturn(crossoverGene);
@@ -266,7 +270,7 @@ void main() {
         trackParents: true,
         dnaService: mockDnaService,
         fitnessService: mockFitnessService,
-        geneService: mockGeneService,
+        geneMutationService: mockGeneMutationService,
         random: mockRandom,
       );
 
@@ -277,7 +281,7 @@ void main() {
       expect(actual, expected);
 
       for (var crossoverGene in crossoverGenes) {
-        verify(() => mockGeneService.mutateGene(
+        verify(() => mockGeneMutationService.mutateGene(
               gene: crossoverGene,
               wave: wave,
             ));
