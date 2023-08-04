@@ -19,7 +19,7 @@ void main() {
     );
   });
 
-  group('normalizedFitnessScore', () {
+  group('totalEntitiesFitnessScore', () {
     test('returns the total sum of fitness scores among entities', () async {
       final List<Entity> entities = List.generate(
         10,

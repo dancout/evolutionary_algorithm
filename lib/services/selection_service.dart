@@ -53,8 +53,8 @@ class SelectionService<T> extends Equatable {
   Entity<T> selectParentFromPool({
     required List<Entity<T>> entities,
   }) {
-    // Calculate the normalized Fitness Score among all entities
-    final normalizedScore = totalEntitiesFitnessScore(entities: entities);
+    // Calculate the total Fitness Score among all entities
+    final totalFitnessScore = totalEntitiesFitnessScore(entities: entities);
 
     // Generate a random number to select against.
     double randNumber = random.nextDouble();
@@ -62,7 +62,7 @@ class SelectionService<T> extends Equatable {
     // Cycle through each entity in the selection pool
     for (var entity in entities) {
       // Calculate the normalized probability of this entity
-      final normalizedProbability = entity.fitnessScore / normalizedScore;
+      final normalizedProbability = entity.fitnessScore / totalFitnessScore;
       // Subtract the probability of selecting this entity from the generated
       // random number
       randNumber -= normalizedProbability;
@@ -76,8 +76,8 @@ class SelectionService<T> extends Equatable {
     // Theoretically, this should never be reached.
     throw Exception(
       'Cycled through all available entities and could not select a parent from'
-      ' the pool. Consider adding a bias to the fitnessScore so that there are '
-      'no 0 values.',
+      ' the pool. Consider adding a nonZeroBias to the FitnessService so that '
+      'there are no 0 values.',
     );
   }
 
