@@ -51,10 +51,9 @@ Generation generation = await geneticEvolution.nextGeneration();
 ## Simple Word Example
 The code for this Word example can be found in the `/example/word_example` folder.
 
-
-<img src="https://github.com/dancout/genetic_evolution/assets/5490028/6c2e2491-0fb9-4ced-91af-f6088cf5013f" width="300">
+<img src="https://github.com/dancout/genetic_evolution/assets/5490028/c450e7d6-7012-4a31-9dbe-65920ec8c1a2" width="400">
 
 ## Intermediate Color Contrast Example
 The code for this Color Contrast example can be found in the `/example/color_contrast_example` folder.
 
-PUT VIDEO HERE
+![color_contrast_genetic_evolution_video](https://github.com/dancout/genetic_evolution/assets/5490028/5268cf33-aeaa-4dbe-b506-eecf1af3108e)
