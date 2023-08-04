@@ -1,5 +1,5 @@
 # genetic_evolution
- A package that simulates an Evolutionary Algorithm among its generations.
+ A package that simulates a Genetic Evolutionary Algorithm among its generations.
 
 
 ## Installation

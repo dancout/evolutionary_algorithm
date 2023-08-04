@@ -1,6 +1,6 @@
 name: genetic_evolution
-description: A new Flutter package project.
-version: 0.0.1
+description: A package that simulates a Genetic Evolutionary Algorithm among its generations.
+version: 0.1.0
 homepage: null
 
 environment:
