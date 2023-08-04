@@ -1,7 +1,7 @@
 name: genetic_evolution
 description: A package that simulates a Genetic Evolutionary Algorithm among its generations.
 version: 0.1.0
-homepage: null
+homepage: https://github.com/dancout/genetic_evolution
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
