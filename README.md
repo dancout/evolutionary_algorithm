@@ -4,7 +4,7 @@
 
 ## Installation
 
-Add `genetic_evolution` as a dependency in your pubspec.yaml file.
+Add `genetic_evolution` as a dependency in your `pubspec.yaml` file.
 
 Import Genetic Evolution:
 ```dart
