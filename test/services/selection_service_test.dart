@@ -32,6 +32,18 @@ void main() {
 
       expect(actual, expected);
     });
+
+    test('throws if total scores is 0', () async {
+      final List<Entity> entities = List.generate(
+        10,
+        (index) => Entity(dna: MockDNA(), fitnessScore: 0.0),
+      );
+
+      expect(
+        () => testObject.totalEntitiesFitnessScore(entities: entities),
+        throwsException,
+      );
+    });
   });
 
   group('selectParentFromPool', () {

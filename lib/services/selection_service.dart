@@ -86,9 +86,17 @@ class SelectionService<T> extends Equatable {
   double totalEntitiesFitnessScore({
     required List<Entity> entities,
   }) {
-    return entities
+    final totalScores = entities
         .map((e) => e.fitnessScore)
         .reduce((value, element) => value + element);
+    if (totalScores == 0.0) {
+      throw Exception(
+          'All fitness scores within Population were zero. Entities cannot be '
+          'compared against one another unless positive fitness scores are '
+          'available. Please update nonZeroBias within the FitnessService to a '
+          'positive value.');
+    }
+    return totalScores;
   }
 
   @override
