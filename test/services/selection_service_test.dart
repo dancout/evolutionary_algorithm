@@ -19,7 +19,7 @@ void main() {
     );
   });
 
-  group('normalizedFitnessScore', () {
+  group('totalEntitiesFitnessScore', () {
     test('returns the total sum of fitness scores among entities', () async {
       final List<Entity> entities = List.generate(
         10,
@@ -31,6 +31,18 @@ void main() {
       final actual = testObject.totalEntitiesFitnessScore(entities: entities);
 
       expect(actual, expected);
+    });
+
+    test('throws if total scores is 0', () async {
+      final List<Entity> entities = List.generate(
+        10,
+        (index) => Entity(dna: MockDNA(), fitnessScore: 0.0),
+      );
+
+      expect(
+        () => testObject.totalEntitiesFitnessScore(entities: entities),
+        throwsException,
+      );
     });
   });
 
