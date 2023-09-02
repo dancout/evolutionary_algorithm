@@ -7,8 +7,14 @@ class EntityService<T> extends Equatable {
     required this.fitnessService,
     required this.geneMutationService,
     required this.trackParents,
+    CrossoverService<T>? crossoverService,
     Random? random,
-  }) : random = random ?? Random();
+  })  : crossoverService = crossoverService ??
+            CrossoverService(
+              dnaService: dnaService,
+              geneMutationService: geneMutationService,
+            ),
+        random = random ?? Random();
 
   /// Represents the DNAService used internally.
   final DNAService<T> dnaService;
@@ -18,6 +24,8 @@ class EntityService<T> extends Equatable {
 
   /// Represents the service used when mutating genes.
   final GeneMutationService<T> geneMutationService;
+
+  final CrossoverService<T> crossoverService;
 
   /// Used as the internal random number generator.
   final Random random;
@@ -40,8 +48,6 @@ class EntityService<T> extends Equatable {
     required List<Entity<T>> parents,
     required int wave,
   }) async {
-    // Initialize your list of Genes
-    final List<Gene<T>> crossedOverGenes = [];
     // Declare the number of parents
     final numParents = parents.length;
 
@@ -50,22 +56,12 @@ class EntityService<T> extends Equatable {
       dnaService.numGenes,
       (_) => random.nextInt(numParents),
     );
-
-    // Populate the crossedOverGenes list with genes from the input parents
-    for (int i = 0; i < dnaService.numGenes; i++) {
-      final parentalGene = parents[randIndices[i]].dna.genes[i];
-
-      // Potentially mutate this gene
-      final potentiallyMutatedGene = geneMutationService.mutateGene(
-        gene: parentalGene,
-        wave: wave,
-      );
-
-      // Add this gene into the list of Crossed Over Genes
-      crossedOverGenes.add(
-        potentiallyMutatedGene,
-      );
-    }
+    // Create a list of genes that have been crossed over between the parents
+    final List<Gene<T>> crossedOverGenes = crossoverService.crossover(
+      parents,
+      randIndices,
+      wave,
+    );
 
     // Declare the new DNA
     final dna = DNA<T>(genes: crossedOverGenes);
