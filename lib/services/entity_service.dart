@@ -58,9 +58,9 @@ class EntityService<T> extends Equatable {
     );
     // Create a list of genes that have been crossed over between the parents
     final List<Gene<T>> crossedOverGenes = crossoverService.crossover(
-      parents,
-      randIndices,
-      wave,
+      parents: parents,
+      randIndices: randIndices,
+      wave: wave,
     );
 
     // Declare the new DNA
