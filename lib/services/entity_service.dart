@@ -8,13 +8,11 @@ class EntityService<T> extends Equatable {
     required this.geneMutationService,
     required this.trackParents,
     CrossoverService<T>? crossoverService,
-    Random? random,
-  })  : crossoverService = crossoverService ??
+  }) : crossoverService = crossoverService ??
             CrossoverService(
               dnaService: dnaService,
               geneMutationService: geneMutationService,
-            ),
-        random = random ?? Random();
+            );
 
   /// Represents the DNAService used internally.
   final DNAService<T> dnaService;
@@ -26,9 +24,6 @@ class EntityService<T> extends Equatable {
   final GeneMutationService<T> geneMutationService;
 
   final CrossoverService<T> crossoverService;
-
-  /// Used as the internal random number generator.
-  final Random random;
 
   /// Whether or not to keep track of an Entity's parents from the previous
   /// generation.
@@ -48,18 +43,9 @@ class EntityService<T> extends Equatable {
     required List<Entity<T>> parents,
     required int wave,
   }) async {
-    // Declare the number of parents
-    final numParents = parents.length;
-
-    // Generate a list of random indices between 0 and the number of parents
-    final List<int> randIndices = List.generate(
-      dnaService.numGenes,
-      (_) => random.nextInt(numParents),
-    );
     // Create a list of genes that have been crossed over between the parents
     final List<Gene<T>> crossedOverGenes = await crossoverService.crossover(
       parents: parents,
-      randIndices: randIndices,
       wave: wave,
     );
 
@@ -81,7 +67,7 @@ class EntityService<T> extends Equatable {
         dnaService,
         fitnessService,
         geneMutationService,
-        random,
         trackParents,
+        crossoverService,
       ];
 }
