@@ -57,7 +57,7 @@ class EntityService<T> extends Equatable {
       (_) => random.nextInt(numParents),
     );
     // Create a list of genes that have been crossed over between the parents
-    final List<Gene<T>> crossedOverGenes = crossoverService.crossover(
+    final List<Gene<T>> crossedOverGenes = await crossoverService.crossover(
       parents: parents,
       randIndices: randIndices,
       wave: wave,

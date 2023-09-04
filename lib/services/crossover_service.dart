@@ -10,11 +10,11 @@ class CrossoverService<T> {
   final DNAService<T> dnaService;
   final GeneMutationService<T> geneMutationService;
 
-  List<Gene<T>> crossover({
+  Future<List<Gene<T>>> crossover({
     required List<Entity<T>> parents,
     required List<int> randIndices,
     required int wave,
-  }) {
+  }) async {
     final List<Gene<T>> crossedOverGenes = [];
 
     // Populate the crossedOverGenes list with genes from the input parents
