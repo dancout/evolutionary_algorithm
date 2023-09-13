@@ -18,11 +18,13 @@ void main() {
   late GeneService mockGeneService;
   late Random mockRandom;
   late PopulationService mockPopulationService;
+  late EntityService mockEntityService;
   late GeneticEvolutionConfig geneticEvolutionConfig;
 
   setUp(() async {
     mockFitnessService = MockFitnessService();
     mockGeneService = MockGeneService();
+    mockEntityService = MockEntityService();
     mockRandom = MockRandom();
     mockPopulationService = MockPopulationService();
 
@@ -39,37 +41,53 @@ void main() {
   });
 
   group('GeneticEvolution', () {
-    test('Initializes services properly', () {
+    test('Initializes based on values passed in', () {
+      final testObject = GeneticEvolution(
+        geneticEvolutionConfig: geneticEvolutionConfig,
+        fitnessService: mockFitnessService,
+        geneService: mockGeneService,
+        entityService: mockEntityService,
+        populationService: mockPopulationService,
+      );
+
+      expect(testObject.populationService, mockPopulationService);
+      expect(testObject.fitnessService, mockFitnessService);
+      expect(testObject.geneService, mockGeneService);
+    });
+
+    test('Initializes when parameters are not all passed in', () {
       final testObject = GeneticEvolution(
         geneticEvolutionConfig: geneticEvolutionConfig,
         fitnessService: mockFitnessService,
         geneService: mockGeneService,
       );
-      final geneMutationService = GeneMutationService(
-        trackMutatedWaves: trackMutatedWaves,
-        mutationRate: mutationRate,
-        geneService: mockGeneService,
-        random: mockRandom,
-      );
-      final expected = PopulationService(
-        entityService: EntityService(
-          dnaService: DNAService(
-            numGenes: geneticEvolutionConfig.numGenes,
-            geneMutationService: geneMutationService,
-          ),
-          random: mockRandom,
-          fitnessService: mockFitnessService,
-          geneMutationService: geneMutationService,
-          trackParents: geneticEvolutionConfig.trackParents,
-        ),
-        selectionService: SelectionService(
-          numParents: geneticEvolutionConfig.numParents,
-          canReproduceWithSelf: geneticEvolutionConfig.canReproduceWithSelf,
-          random: mockRandom,
-        ),
-      );
 
-      expect(testObject.populationService, expected);
+      final geneMutationService = GeneMutationService(
+        trackMutatedWaves: geneticEvolutionConfig.trackMutatedWaves,
+        mutationRate: geneticEvolutionConfig.mutationRate,
+        geneService: mockGeneService,
+        random: geneticEvolutionConfig.random,
+      );
+      expect(
+        testObject.populationService,
+        PopulationService(
+          entityService: EntityService(
+            dnaService: DNAService(
+              numGenes: numGenes,
+              geneMutationService: geneMutationService,
+            ),
+            fitnessService: mockFitnessService,
+            geneMutationService: geneMutationService,
+            trackParents: geneticEvolutionConfig.trackParents,
+            random: geneticEvolutionConfig.random,
+          ),
+          selectionService: SelectionService(
+            canReproduceWithSelf: geneticEvolutionConfig.canReproduceWithSelf,
+            numParents: geneticEvolutionConfig.numParents,
+            random: geneticEvolutionConfig.random,
+          ),
+        ),
+      );
     });
   });
 

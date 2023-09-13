@@ -11,6 +11,7 @@ part 'package:genetic_evolution/models/gene.dart';
 part 'package:genetic_evolution/models/generation.dart';
 part 'package:genetic_evolution/models/genetic_evolution_config.dart';
 part 'package:genetic_evolution/models/population.dart';
+part 'package:genetic_evolution/services/crossover_service.dart';
 part 'package:genetic_evolution/services/dna_service.dart';
 part 'package:genetic_evolution/services/entity_service.dart';
 part 'package:genetic_evolution/services/fitness_service.dart';
@@ -27,6 +28,7 @@ class GeneticEvolution<T> {
     required this.fitnessService,
     required this.geneService,
     @visibleForTesting PopulationService<T>? populationService,
+    @visibleForTesting EntityService<T>? entityService,
   }) {
     final geneMutationService = GeneMutationService(
       trackMutatedWaves: geneticEvolutionConfig.trackMutatedWaves,
@@ -40,13 +42,14 @@ class GeneticEvolution<T> {
       geneMutationService: geneMutationService,
     );
 
-    final entityService = EntityService<T>(
-      dnaService: dnaService,
-      fitnessService: fitnessService,
-      geneMutationService: geneMutationService,
-      trackParents: geneticEvolutionConfig.trackParents,
-      random: geneticEvolutionConfig.random,
-    );
+    this._entityService = entityService ??
+        EntityService<T>(
+          dnaService: dnaService,
+          fitnessService: fitnessService,
+          geneMutationService: geneMutationService,
+          trackParents: geneticEvolutionConfig.trackParents,
+          random: geneticEvolutionConfig.random,
+        );
 
     final selectionService = SelectionService<T>(
       canReproduceWithSelf: geneticEvolutionConfig.canReproduceWithSelf,
@@ -56,7 +59,7 @@ class GeneticEvolution<T> {
 
     this.populationService = populationService ??
         PopulationService<T>(
-          entityService: entityService,
+          entityService: _entityService,
           selectionService: selectionService,
         );
   }
@@ -69,8 +72,11 @@ class GeneticEvolution<T> {
   @visibleForTesting
   late final PopulationService<T> populationService;
 
+  /// The EntityService used to populate the entities of this Population.
+  late final EntityService<T> _entityService;
+
   /// Represents the service used to calculate an entity's fitness core.
-  final FitnessService fitnessService;
+  final FitnessService<T> fitnessService;
 
   /// The GeneService used to intialize new Genes.
   final GeneService<T> geneService;

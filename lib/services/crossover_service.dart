@@ -1,6 +1,6 @@
 part of 'package:genetic_evolution/genetic_evolution.dart';
 
-class CrossoverService<T> {
+class CrossoverService<T> extends Equatable {
   CrossoverService({
     required this.geneMutationService,
     Random? random,
@@ -39,4 +39,10 @@ class CrossoverService<T> {
     }
     return crossedOverGenes;
   }
+
+  @override
+  List<Object?> get props => [
+        geneMutationService,
+        random,
+      ];
 }
