@@ -24,3 +24,5 @@ class MockSelectionService extends Mock implements SelectionService {}
 class MockPopulationService extends Mock implements PopulationService {}
 
 class MockGeneMutationService extends Mock implements GeneMutationService {}
+
+class MockCrossoverService extends Mock implements CrossoverService {}
