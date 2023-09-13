@@ -12,7 +12,6 @@ class EntityService<T> extends Equatable {
     CrossoverService<T>? crossoverService,
   }) : crossoverService = crossoverService ??
             CrossoverService(
-              dnaService: dnaService,
               geneMutationService: geneMutationService,
             );
 

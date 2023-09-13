@@ -1,14 +1,11 @@
 part of 'package:genetic_evolution/genetic_evolution.dart';
 
-// TODO: Write tests for this file.
 class CrossoverService<T> {
   CrossoverService({
-    required this.dnaService,
     required this.geneMutationService,
     Random? random,
   }) : random = random ?? Random();
 
-  final DNAService<T> dnaService;
   final GeneMutationService<T> geneMutationService;
   final Random random;
 

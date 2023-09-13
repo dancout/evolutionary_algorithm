@@ -29,7 +29,6 @@ void main() {
 
   late DNAService mockDnaService;
   late FitnessService mockFitnessService;
-  late GeneMutationService mockGeneMutationService;
   late CrossoverService mockCrossoverService;
 
   late EntityService testObject;
