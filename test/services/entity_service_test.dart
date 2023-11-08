@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:mocktail/mocktail.dart';
@@ -31,27 +29,81 @@ void main() {
 
   late DNAService mockDnaService;
   late FitnessService mockFitnessService;
-  late GeneService mockGeneService;
-  late GeneMutationService mockGeneMutationService;
-  late Random mockRandom;
+  late CrossoverService mockCrossoverService;
 
   late EntityService testObject;
+
+  final parent0 = Entity(
+    dna: DNA(
+        genes: List.generate(
+      numGenes,
+      (index) => Gene(value: index),
+    )),
+    fitnessScore: fitnessScore,
+  );
+
+  final parent1 = Entity(
+    dna: DNA(
+        genes: List.generate(
+      numGenes,
+      (index) => Gene(value: 10 + index),
+    )),
+    fitnessScore: fitnessScore,
+  );
+
+  final parent2 = Entity(
+    dna: DNA(
+        genes: List.generate(
+      numGenes,
+      (index) => Gene(value: 20 + index),
+    )),
+    fitnessScore: fitnessScore,
+  );
+
+  final parent3 = Entity(
+    dna: DNA(
+        genes: List.generate(
+      numGenes,
+      (index) => Gene(value: 30 + index),
+    )),
+    fitnessScore: fitnessScore,
+  );
+  final List<Entity> parents = [
+    parent0,
+    parent1,
+    parent2,
+    parent3,
+  ];
+
+  // Generate the list of genes based on the index of the parent
+  final List<Gene> crossoverGenes = List.generate(
+    numGenes,
+    (index) {
+      final parentIndex = parentIndices[index];
+      return parents[parentIndex].dna.genes[index];
+    },
+  );
+
+  final crossoverDna = DNA(genes: crossoverGenes);
 
   setUp(() async {
     mockDnaService = MockDNAService();
     mockFitnessService = MockFitnessService();
-    mockGeneService = MockGeneService();
-    mockGeneMutationService = MockGeneMutationService();
-    mockRandom = MockRandom();
+
+    mockCrossoverService = MockCrossoverService();
     testObject = EntityService(
       trackParents: trackParents,
       dnaService: mockDnaService,
       fitnessService: mockFitnessService,
-      geneMutationService: mockGeneMutationService,
-      random: mockRandom,
+      geneMutationService: MockGeneMutationService(),
+      crossoverService: mockCrossoverService,
     );
 
-    when(() => mockGeneMutationService.geneService).thenReturn(mockGeneService);
+    when(() => mockCrossoverService.crossover(parents: parents, wave: wave))
+        .thenAnswer((invocation) async => crossoverGenes);
+
+    when(() => mockFitnessService.calculateScore(dna: crossoverDna))
+        .thenAnswer((_) async => crossoverFitnessScore);
   });
 
   group('randomEntity', () {
@@ -75,83 +127,6 @@ void main() {
     test(
         'will create an Entity with randomly crossed over genes from the parents'
         'without tracking parents when trackParents is false', () async {
-      when(() => mockDnaService.numGenes).thenReturn(numGenes);
-
-      final parent0 = Entity(
-        dna: DNA(
-            genes: List.generate(
-          numGenes,
-          (index) => Gene(value: index),
-        )),
-        fitnessScore: fitnessScore,
-      );
-
-      final parent1 = Entity(
-        dna: DNA(
-            genes: List.generate(
-          numGenes,
-          (index) => Gene(value: 10 + index),
-        )),
-        fitnessScore: fitnessScore,
-      );
-
-      final parent2 = Entity(
-        dna: DNA(
-            genes: List.generate(
-          numGenes,
-          (index) => Gene(value: 20 + index),
-        )),
-        fitnessScore: fitnessScore,
-      );
-
-      final parent3 = Entity(
-        dna: DNA(
-            genes: List.generate(
-          numGenes,
-          (index) => Gene(value: 30 + index),
-        )),
-        fitnessScore: fitnessScore,
-      );
-      final List<Entity> parents = [
-        parent0,
-        parent1,
-        parent2,
-        parent3,
-      ];
-
-      final List<int Function(Invocation)> removableParentIndices =
-          List.generate(
-        parentIndices.length,
-        (index) => (_) => parentIndices[index],
-      );
-
-      when(() => mockDnaService.numGenes).thenReturn(numGenes);
-
-      // This is done so that we can return a different value each time .nextInt
-      // is called.
-      when(() => mockRandom.nextInt(parents.length))
-          .thenAnswer((_) => removableParentIndices.removeAt(0)(_));
-
-      // Generate the list of genes based on the index of the parent
-      final List<Gene> crossoverGenes = List.generate(
-        numGenes,
-        (index) {
-          final parentIndex = parentIndices[index];
-          return parents[parentIndex].dna.genes[index];
-        },
-      );
-
-      for (var crossoverGene in crossoverGenes) {
-        when(() => mockGeneMutationService.mutateGene(
-              gene: crossoverGene,
-              wave: wave,
-            )).thenReturn(crossoverGene);
-      }
-
-      final crossoverDna = DNA(genes: crossoverGenes);
-      when(() => mockFitnessService.calculateScore(dna: crossoverDna))
-          .thenAnswer((_) async => crossoverFitnessScore);
-
       final expected = Entity(
         dna: crossoverDna,
         fitnessScore: crossoverFitnessScore,
@@ -164,96 +139,14 @@ void main() {
       );
       expect(actual, expected);
 
-      for (var crossoverGene in crossoverGenes) {
-        verify(() => mockGeneMutationService.mutateGene(
-              gene: crossoverGene,
-              wave: wave,
-            ));
-      }
       verify(() => mockFitnessService.calculateScore(dna: crossoverDna));
-      verify(() => mockDnaService.numGenes);
+      verify(
+          () => mockCrossoverService.crossover(parents: parents, wave: wave));
     });
 
     test(
         'will create an Entity with randomly crossed over genes from the parents'
         'while tracking parents when trackParents is true', () async {
-      when(() => mockDnaService.numGenes).thenReturn(numGenes);
-
-      final parent0 = Entity(
-        dna: DNA(
-            genes: List.generate(
-          numGenes,
-          (index) => Gene(value: index),
-        )),
-        fitnessScore: fitnessScore,
-      );
-
-      final parent1 = Entity(
-        dna: DNA(
-            genes: List.generate(
-          numGenes,
-          (index) => Gene(value: 10 + index),
-        )),
-        fitnessScore: fitnessScore,
-      );
-
-      final parent2 = Entity(
-        dna: DNA(
-            genes: List.generate(
-          numGenes,
-          (index) => Gene(value: 20 + index),
-        )),
-        fitnessScore: fitnessScore,
-      );
-
-      final parent3 = Entity(
-        dna: DNA(
-            genes: List.generate(
-          numGenes,
-          (index) => Gene(value: 30 + index),
-        )),
-        fitnessScore: fitnessScore,
-      );
-      final List<Entity> parents = [
-        parent0,
-        parent1,
-        parent2,
-        parent3,
-      ];
-
-      final List<int Function(Invocation)> removableParentIndices =
-          List.generate(
-        parentIndices.length,
-        (index) => (_) => parentIndices[index],
-      );
-
-      when(() => mockDnaService.numGenes).thenReturn(numGenes);
-
-      // This is done so that we can return a different value each time .nextInt
-      // is called.
-      when(() => mockRandom.nextInt(parents.length))
-          .thenAnswer((_) => removableParentIndices.removeAt(0)(_));
-
-      // Generate the list of genes based on the index of the parent
-      final List<Gene> crossoverGenes = List.generate(
-        numGenes,
-        (index) {
-          final parentIndex = parentIndices[index];
-          return parents[parentIndex].dna.genes[index];
-        },
-      );
-
-      for (var crossoverGene in crossoverGenes) {
-        when(() => mockGeneMutationService.mutateGene(
-              gene: crossoverGene,
-              wave: wave,
-            )).thenReturn(crossoverGene);
-      }
-
-      final crossoverDna = DNA(genes: crossoverGenes);
-      when(() => mockFitnessService.calculateScore(dna: crossoverDna))
-          .thenAnswer((_) async => crossoverFitnessScore);
-
       final expected = Entity(
         dna: crossoverDna,
         fitnessScore: crossoverFitnessScore,
@@ -264,8 +157,8 @@ void main() {
         trackParents: true,
         dnaService: mockDnaService,
         fitnessService: mockFitnessService,
-        geneMutationService: mockGeneMutationService,
-        random: mockRandom,
+        geneMutationService: MockGeneMutationService(),
+        crossoverService: mockCrossoverService,
       );
 
       final actual = await testObject.crossOver(
@@ -274,14 +167,9 @@ void main() {
       );
       expect(actual, expected);
 
-      for (var crossoverGene in crossoverGenes) {
-        verify(() => mockGeneMutationService.mutateGene(
-              gene: crossoverGene,
-              wave: wave,
-            ));
-      }
       verify(() => mockFitnessService.calculateScore(dna: crossoverDna));
-      verify(() => mockDnaService.numGenes);
+      verify(
+          () => mockCrossoverService.crossover(parents: parents, wave: wave));
     });
   });
 }
