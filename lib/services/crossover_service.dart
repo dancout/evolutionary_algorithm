@@ -1,5 +1,6 @@
 part of 'package:genetic_evolution/genetic_evolution.dart';
 
+/// Used for crossing over parents to create a child.
 class CrossoverService<T> extends Equatable {
   CrossoverService({
     required this.geneMutationService,
@@ -9,6 +10,8 @@ class CrossoverService<T> extends Equatable {
   final GeneMutationService<T> geneMutationService;
   final Random random;
 
+  /// Used to Cross Over the incoming [parents] to generate a child, represented
+  /// as a List<Gene>>.
   Future<List<Gene<T>>> crossover({
     required List<Entity<T>> parents,
     required int wave,

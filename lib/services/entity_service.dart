@@ -24,6 +24,7 @@ class EntityService<T> extends Equatable {
   /// Represents the service used when mutating genes.
   final GeneMutationService<T> geneMutationService;
 
+  /// Represents the service used to crossover parents into a child entity.
   final CrossoverService<T> crossoverService;
 
   /// Whether or not to keep track of an Entity's parents from the previous
