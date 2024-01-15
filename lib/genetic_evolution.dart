@@ -13,7 +13,7 @@ part 'package:genetic_evolution/models/genetic_evolution_config.dart';
 part 'package:genetic_evolution/models/population.dart';
 part 'package:genetic_evolution/services/crossover_service.dart';
 part 'package:genetic_evolution/services/dna_service.dart';
-part 'package:genetic_evolution/services/entity_service.dart';
+part 'package:genetic_evolution/services/entity_service/entity_service.dart';
 part 'package:genetic_evolution/services/fitness_service.dart';
 part 'package:genetic_evolution/services/gene_mutation_service.dart';
 part 'package:genetic_evolution/services/gene_service.dart';
