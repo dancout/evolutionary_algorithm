@@ -11,6 +11,7 @@ class GeneticEvolutionConfig {
     this.canReproduceWithSelf = true,
     this.trackMutatedWaves = false,
     this.random,
+    this.generationsToTrack,
   }) {
     assert(
       mutationRate >= 0.toDouble() && mutationRate <= 1.toDouble(),
@@ -47,4 +48,17 @@ class GeneticEvolutionConfig {
 
   /// Used as the internal random number generator.
   final Random? random;
+
+  /// The number of generations of parents to track. A null value signifies that
+  /// you will track every set of parents across every generation.
+  ///
+  /// For example:
+  /// - null means you would track all parents as far back as possible.
+  /// - 1 means you would only track the parents of this Entity.
+  /// - 2 means you would track the parents & grandparents of this Entity.
+  /// - 3 means you would track the parents, grandparents, & great grandparents
+  ///     of this Entity.
+  ///
+  /// This value is not intended to be negative.
+  final int? generationsToTrack;
 }

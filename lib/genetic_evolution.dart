@@ -13,6 +13,7 @@ part 'package:genetic_evolution/models/genetic_evolution_config.dart';
 part 'package:genetic_evolution/models/population.dart';
 part 'package:genetic_evolution/services/crossover_service.dart';
 part 'package:genetic_evolution/services/dna_service.dart';
+part 'package:genetic_evolution/services/entity_service/entity_parent_manipulator.dart';
 part 'package:genetic_evolution/services/entity_service/entity_service.dart';
 part 'package:genetic_evolution/services/fitness_service.dart';
 part 'package:genetic_evolution/services/gene_mutation_service.dart';
@@ -29,6 +30,7 @@ class GeneticEvolution<T> {
     required this.geneService,
     @visibleForTesting PopulationService<T>? populationService,
     @visibleForTesting EntityService<T>? entityService,
+    @visibleForTesting EntityParentManinpulator<T>? entityParentManinpulator,
   }) {
     final geneMutationService = GeneMutationService(
       trackMutatedWaves: geneticEvolutionConfig.trackMutatedWaves,
@@ -47,8 +49,12 @@ class GeneticEvolution<T> {
           dnaService: dnaService,
           fitnessService: fitnessService,
           geneMutationService: geneMutationService,
-          trackParents: geneticEvolutionConfig.trackParents,
           random: geneticEvolutionConfig.random,
+          entityParentManinpulator: entityParentManinpulator ??
+              EntityParentManinpulator(
+                trackParents: geneticEvolutionConfig.trackParents,
+                generationsToTrack: geneticEvolutionConfig.generationsToTrack,
+              ),
         );
 
     final selectionService = SelectionService<T>(

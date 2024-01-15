@@ -72,13 +72,15 @@ void main() {
         testObject.populationService,
         PopulationService(
           entityService: EntityService(
+            entityParentManinpulator: EntityParentManinpulator(
+              trackParents: geneticEvolutionConfig.trackParents,
+            ),
             dnaService: DNAService(
               numGenes: numGenes,
               geneMutationService: geneMutationService,
             ),
             fitnessService: mockFitnessService,
             geneMutationService: geneMutationService,
-            trackParents: geneticEvolutionConfig.trackParents,
             random: geneticEvolutionConfig.random,
           ),
           selectionService: SelectionService(
