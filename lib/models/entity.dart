@@ -17,6 +17,18 @@ class Entity<T> extends Equatable {
   /// Represents the parents of this entity.
   final List<Entity<T>>? parents;
 
+  Entity<T> copyWith({
+    DNA<T>? dna,
+    double? fitnessScore,
+    List<Entity<T>>? parents,
+  }) {
+    return Entity(
+      dna: dna ?? this.dna,
+      fitnessScore: fitnessScore ?? this.fitnessScore,
+      parents: parents ?? this.parents,
+    );
+  }
+
   @override
   List<Object?> get props => [
         dna,
