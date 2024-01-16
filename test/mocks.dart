@@ -26,3 +26,6 @@ class MockPopulationService extends Mock implements PopulationService {}
 class MockGeneMutationService extends Mock implements GeneMutationService {}
 
 class MockCrossoverService extends Mock implements CrossoverService {}
+
+class MockEntityParentManipulator extends Mock
+    implements EntityParentManinpulator {}
