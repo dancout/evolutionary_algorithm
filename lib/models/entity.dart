@@ -17,6 +17,7 @@ class Entity<T> extends Equatable {
   /// Represents the parents of this entity.
   final List<Entity<T>>? parents;
 
+  /// Returns a copied version of this [Entity] with only the inputs updated.
   Entity<T> copyWith({
     DNA<T>? dna,
     double? fitnessScore,
