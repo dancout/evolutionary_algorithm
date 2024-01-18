@@ -1,3 +1,7 @@
+## 0.2.1
+
+* Exposed `sortingMethod` on `Population` to be more customizable
+
 ## 0.2.0
 
 * These changes go along with the creation of the [genetically_evolving_neural_network](https://github.com/dancout/genetically_evolving_neural_network) package
