@@ -1,6 +1,8 @@
 part of 'package:genetic_evolution/genetic_evolution.dart';
 
+/// Used to update the parents on a given [Entity] object.
 class EntityParentManinpulator<T> extends Equatable {
+  /// Used to update the parents on a given [Entity] object.
   const EntityParentManinpulator({
     required this.trackParents,
     this.generationsToTrack,
@@ -23,6 +25,10 @@ class EntityParentManinpulator<T> extends Equatable {
   /// generation.
   final bool trackParents;
 
+  /// This will return an updated set of parent [Entity] objects that will
+  /// retain its track parents up until this class's
+  /// [EntityParentManinpulator.generationsToTrack] number of generations has
+  /// been reached counting upward from the most recent generation.
   List<Entity<T>>? updateParents({
     required List<Entity<T>>? parents,
     required int currentGeneration,
