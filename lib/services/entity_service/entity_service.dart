@@ -5,8 +5,10 @@ class EntityService<T> extends Equatable {
   EntityService({
     required this.dnaService,
     required this.fitnessService,
-    required this.geneMutationService,
-    required this.trackParents,
+
+    /// Represents the service used when mutating genes.
+    required GeneMutationService<T> geneMutationService,
+    required this.entityParentManinpulator,
     Random? random,
     @visibleForTesting CrossoverService<T>? crossoverService,
   }) : crossoverService = crossoverService ??
@@ -21,16 +23,14 @@ class EntityService<T> extends Equatable {
   /// Represents the service used to calculate this entity's fitness core.
   final FitnessService fitnessService;
 
-  /// Represents the service used when mutating genes.
-  final GeneMutationService<T> geneMutationService;
-
   /// Represents the service used to crossover parents into a child entity.
   final CrossoverService<T> crossoverService;
 
-  /// Whether or not to keep track of an Entity's parents from the previous
-  /// generation.
-  final bool trackParents;
+  /// Used to handle keeping track of the parents of an Entity after it has been
+  /// crossed over.
+  final EntityParentManinpulator<T> entityParentManinpulator;
 
+  /// Generates a random Entity.
   Future<Entity<T>> randomEntity() async {
     final randomDNA = dnaService.randomDNA();
     return Entity<T>(
@@ -56,11 +56,17 @@ class EntityService<T> extends Equatable {
     // Declare the fitness score of this new DNA
     final fitnessScore = await fitnessService.calculateScore(dna: dna);
 
+    // Update parents of Entity using helper class
+    final updatedParents = entityParentManinpulator.updateParents(
+      parents: parents,
+      currentGeneration: 1,
+    );
+
     // Return the newly created Entity
-    return Entity(
+    return Entity<T>(
       dna: dna,
       fitnessScore: fitnessScore,
-      parents: trackParents ? parents : null,
+      parents: updatedParents,
     );
   }
 
@@ -68,8 +74,7 @@ class EntityService<T> extends Equatable {
   List<Object?> get props => [
         dnaService,
         fitnessService,
-        geneMutationService,
-        trackParents,
         crossoverService,
+        entityParentManinpulator,
       ];
 }

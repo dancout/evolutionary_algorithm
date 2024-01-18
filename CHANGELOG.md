@@ -1,3 +1,9 @@
+## 0.2.0
+
+* These changes go along with the creation of the [genetically_evolving_neural_network](https://github.com/dancout/genetically_evolving_neural_network) package
+* Added `generationsToTrack` to `GeneticEvolutionConfig` to specify exactly how many generations of parents to keep track of
+* Extracted out EntityParentManipulator for testability
+
 ## 0.1.2
 
 * These changes go along with the creation of the [genetically_evolving_neural_network](https://github.com/dancout/genetically_evolving_neural_network) package

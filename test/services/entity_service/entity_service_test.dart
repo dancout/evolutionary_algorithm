@@ -2,14 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:genetic_evolution/genetic_evolution.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../mocks.dart';
+import '../../mocks.dart';
 
 void main() {
   final DNA mockDNA = MockDNA();
   const fitnessScore = 100.0;
   const crossoverFitnessScore = 200.0;
-  const trackParents = false;
   const wave = 1;
+  const currentGeneration = 1;
 
   // A list meant to represent a random selection of the index corresponding to
   // 1 of 4 parents.
@@ -30,6 +30,7 @@ void main() {
   late DNAService mockDnaService;
   late FitnessService mockFitnessService;
   late CrossoverService mockCrossoverService;
+  late EntityParentManinpulator mockEntityParentManinpulator;
 
   late EntityService testObject;
 
@@ -89,10 +90,11 @@ void main() {
   setUp(() async {
     mockDnaService = MockDNAService();
     mockFitnessService = MockFitnessService();
+    mockEntityParentManinpulator = MockEntityParentManipulator();
 
     mockCrossoverService = MockCrossoverService();
     testObject = EntityService(
-      trackParents: trackParents,
+      entityParentManinpulator: mockEntityParentManinpulator,
       dnaService: mockDnaService,
       fitnessService: mockFitnessService,
       geneMutationService: MockGeneMutationService(),
@@ -125,12 +127,18 @@ void main() {
 
   group('crossOver', () {
     test(
-        'will create an Entity with randomly crossed over genes from the parents'
-        'without tracking parents when trackParents is false', () async {
+        'will create an Entity with randomly crossed over genes from the parents',
+        () async {
+      final expectedParentsMissingParent2 = [parent0, parent1, parent3];
+
+      when(() => mockEntityParentManinpulator.updateParents(
+              parents: parents, currentGeneration: currentGeneration))
+          .thenReturn(expectedParentsMissingParent2);
+
       final expected = Entity(
         dna: crossoverDna,
         fitnessScore: crossoverFitnessScore,
-        parents: null,
+        parents: expectedParentsMissingParent2,
       );
 
       final actual = await testObject.crossOver(
@@ -142,34 +150,12 @@ void main() {
       verify(() => mockFitnessService.calculateScore(dna: crossoverDna));
       verify(
           () => mockCrossoverService.crossover(parents: parents, wave: wave));
-    });
-
-    test(
-        'will create an Entity with randomly crossed over genes from the parents'
-        'while tracking parents when trackParents is true', () async {
-      final expected = Entity(
-        dna: crossoverDna,
-        fitnessScore: crossoverFitnessScore,
-        parents: parents,
-      );
-
-      testObject = EntityService(
-        trackParents: true,
-        dnaService: mockDnaService,
-        fitnessService: mockFitnessService,
-        geneMutationService: MockGeneMutationService(),
-        crossoverService: mockCrossoverService,
-      );
-
-      final actual = await testObject.crossOver(
-        parents: parents,
-        wave: wave,
-      );
-      expect(actual, expected);
-
-      verify(() => mockFitnessService.calculateScore(dna: crossoverDna));
       verify(
-          () => mockCrossoverService.crossover(parents: parents, wave: wave));
+        () => mockEntityParentManinpulator.updateParents(
+          parents: parents,
+          currentGeneration: currentGeneration,
+        ),
+      );
     });
   });
 }
