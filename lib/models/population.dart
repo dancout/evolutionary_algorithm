@@ -1,25 +1,29 @@
 part of 'package:genetic_evolution/genetic_evolution.dart';
 
-/// Represents a collection of [entities].
+/// Represents a collection of [Entity] objects.
 class Population<T> extends Equatable {
-  const Population({
+  /// Represents a collection of [Entity] objects.
+  Population({
     required this.entities,
-  });
+    int Function(Entity<T> a, Entity<T> b)? sortingMethod,
+  }) {
+    fallbackSortMethod(Entity<T> a, Entity<T> b) =>
+        b.fitnessScore.compareTo(a.fitnessScore);
+
+    this.sortingMethod = sortingMethod ?? fallbackSortMethod;
+  }
 
   /// Represents the entities present within this population.
   final List<Entity<T>> entities;
-  @override
-  List<Object?> get props => [
-        entities,
-      ];
-}
 
-extension PopulationExtension<T> on Population<T> {
+  /// Represents the method used to sort [Population.entities].
+  late final int Function(Entity<T> a, Entity<T> b) sortingMethod;
+
   /// Returns a list of entities in this population sorted in order from highest
   /// fitnessScore to lowest.
   List<Entity<T>> get sortedEntities => List.from(entities)
     ..sort(
-      (a, b) => b.fitnessScore.compareTo(a.fitnessScore),
+      sortingMethod,
     );
 
   /// Returns the top scoring entity from this population.
@@ -32,4 +36,10 @@ extension PopulationExtension<T> on Population<T> {
               : previousValue,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        entities,
+        sortingMethod,
+      ];
 }
