@@ -38,4 +38,21 @@ class Population<T> extends Equatable {
         entities,
         sortingMethod,
       ];
+
+  /// Converts the input [json] into a [Population] object.
+  factory Population.fromJson(Map<String, dynamic> json) {
+    return Population<T>(
+      entities: (json['entities'] as List<dynamic>)
+          .map((entityJson) => Entity<T>.fromJson(entityJson))
+          .toList(),
+    );
+  }
+
+  /// Converts the [Population] object to JSON.
+  Map<String, dynamic> toJson() {
+    return {
+      'entities': entities.map((entity) => entity.toJson()).toList(),
+      // TODO: Consider option for writing sortingMethod to and from JSON.
+    };
+  }
 }
