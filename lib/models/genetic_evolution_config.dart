@@ -12,23 +12,12 @@ class GeneticEvolutionConfig {
     this.trackMutatedWaves = false,
     this.random,
     this.generationsToTrack,
-    JsonConverter? jsonConverter,
   }) {
     assert(
       mutationRate >= 0.toDouble() && mutationRate <= 1.toDouble(),
       'mutationRate must be between 0 and 1, inclusively',
     );
-    if (jsonConverter != null) {
-      GeneticEvolutionConfig.jsonConverter = jsonConverter;
-    }
   }
-
-  static Error jsonConverterUnimplementedError = UnimplementedError(
-    'JsonConverter is undefined on GeneticEvolutionConfig.',
-  );
-
-  /// Used to convert objects of Type <T> to and from Json.
-  static JsonConverter? jsonConverter;
 
   /// The number of genes in each DNA sequence within each Entity
   final int numGenes;

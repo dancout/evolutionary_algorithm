@@ -29,6 +29,7 @@ class GeneticEvolution<T> {
     required this.geneticEvolutionConfig,
     required this.fitnessService,
     required this.geneService,
+    JsonConverter? jsonConverter,
     @visibleForTesting PopulationService<T>? populationService,
     @visibleForTesting EntityService<T>? entityService,
     @visibleForTesting EntityParentManinpulator<T>? entityParentManinpulator,
@@ -69,6 +70,10 @@ class GeneticEvolution<T> {
           entityService: _entityService,
           selectionService: selectionService,
         );
+
+    if (jsonConverter != null) {
+      GeneticEvolution.jsonConverter = jsonConverter;
+    }
   }
 
   /// The config object used to store setup parameters for the Genetic Evolution
@@ -91,6 +96,13 @@ class GeneticEvolution<T> {
   // Represents the current generation.
   Generation<T>? _generation;
 
+  /// Used to convert objects of Type <T> to and from Json.
+  static JsonConverter? jsonConverter;
+
+  /// The error to throw during an attempt to use a null [JsonConverter].
+  static Error jsonConverterUnimplementedError = UnimplementedError(
+    'JsonConverter is undefined on GeneticEvolution.',
+  );
   Future<Generation<T>> nextGeneration() async {
     late Population<T> population;
 

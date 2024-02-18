@@ -22,7 +22,7 @@ class Gene<T> extends Equatable {
 
   factory Gene.fromJson(Map<String, dynamic> json) {
     // Grab the static JsonConverter
-    final jsonConverter = GeneticEvolutionConfig.jsonConverter;
+    final jsonConverter = GeneticEvolution.jsonConverter;
 
     // Check that it has been set
     if (jsonConverter != null) {
@@ -34,6 +34,6 @@ class Gene<T> extends Equatable {
       );
     }
     // If not, then throw an error from attempting to use a null JsonConverter.
-    throw GeneticEvolutionConfig.jsonConverterUnimplementedError;
+    throw GeneticEvolution.jsonConverterUnimplementedError;
   }
 }
