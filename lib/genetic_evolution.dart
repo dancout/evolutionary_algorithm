@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'package:genetic_evolution/models/dna.dart';
 part 'package:genetic_evolution/models/entity.dart';
