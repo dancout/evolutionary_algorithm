@@ -1,10 +1,13 @@
 library genetic_evolution;
 
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:path_provider/path_provider.dart';
 
 part 'package:genetic_evolution/models/dna.dart';
 part 'package:genetic_evolution/models/entity.dart';
@@ -21,6 +24,7 @@ part 'package:genetic_evolution/services/gene_mutation_service.dart';
 part 'package:genetic_evolution/services/gene_service.dart';
 part 'package:genetic_evolution/services/population_service.dart';
 part 'package:genetic_evolution/services/selection_service.dart';
+part 'package:genetic_evolution/utils/file_parser.dart';
 
 /// Used for generating populations that evolve over time through genetic
 /// breeding and mutation.
@@ -76,6 +80,47 @@ class GeneticEvolution<T> {
     }
   }
 
+  /// Loads in a [Generation] from a file corresponding to the input [wave] and
+  /// sets it internally on this [GeneticEvolution] object.
+  Future<void> loadGenerationFromFile({
+    required int wave,
+    JsonConverter? jsonConverter,
+    FileParser<T>? fileParser,
+  }) async {
+    // Ensure that a FileParser is set so that we can properly load in a File.
+    fileParser = _getFileParser(fileParser, jsonConverter);
+
+    // Load the Generation from file.
+    _generation = await fileParser.readGenerationFromFile(
+      wave: wave,
+    );
+    // Set _fromLoad so that we know to return the generation from file on the
+    // next retrieval call.
+    _fromLoad = true;
+  }
+
+  /// Returns a valid [FileParser] object based on the input [fileParser] and
+  /// [jsonConverter].
+  // TODO: Should probably move this to a FileParserHelper class or something
+  /// similar.
+  FileParser<T> _getFileParser(FileParser<T>? fileParser,
+      JsonConverter<dynamic, dynamic>? jsonConverter) {
+    if (fileParser == null) {
+      jsonConverter ??= GeneticEvolution.jsonConverter;
+      if (jsonConverter == null) {
+        throw AssertionError(
+          'Either JsonConverter or FileParser must be provided for '
+          'GeneticEvolution loadFromFile.',
+        );
+      } else {
+        fileParser = FileParser<T>(
+          jsonConverter: jsonConverter,
+        );
+      }
+    }
+    return fileParser;
+  }
+
   /// The config object used to store setup parameters for the Genetic Evolution
   /// algorithm.
   final GeneticEvolutionConfig geneticEvolutionConfig;
@@ -103,25 +148,39 @@ class GeneticEvolution<T> {
   static Error jsonConverterUnimplementedError = UnimplementedError(
     'JsonConverter is undefined on GeneticEvolution.',
   );
+
+  /// Represents whether this object was created from a preloaded Generation.
+  bool _fromLoad = false;
+
   Future<Generation<T>> nextGeneration() async {
     late Population<T> population;
 
     final generation = this._generation;
-    final wave = (generation?.wave ?? -1) + 1;
+    // Default to -1 so that we are actually 0 indexed.
+    final previousWave = generation?.wave ?? -1;
+    // If we are preloading in, we do not want to increment the wave number yet.
+    final increment = _fromLoad ? 0 : 1;
+    final wave = previousWave + increment;
     if (generation == null) {
       // Initialize
       population = await populationService.randomPopulation(
         populationSize: geneticEvolutionConfig.populationSize,
       );
+    } else if (_fromLoad) {
+      // Set the population from the incoming generation
+      population = generation.population;
+
+      // We should only preload a population in once
+      _fromLoad = false;
     } else {
       population = await populationService.reproduce(
         population: generation.population,
         wave: wave,
+        populationSize: geneticEvolutionConfig.populationSize,
       );
     }
 
     return this._generation = Generation<T>(
-      // Default to -1 so that we are actually 0 indexed
       wave: wave,
       population: population,
     );

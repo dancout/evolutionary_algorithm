@@ -32,11 +32,12 @@ class PopulationService<T> extends Equatable {
   Future<Population<T>> reproduce({
     required Population<T> population,
     required int wave,
+    required int populationSize,
   }) async {
     // Declare the list of new children
     final List<Entity<T>> children = [];
 
-    for (int i = 0; i < population.entities.length; i++) {
+    for (int i = 0; i < populationSize; i++) {
       // Select parents for the new child
       final parents = selectionService.selectParents(
         population: population,
