@@ -40,36 +40,3 @@ class Generation<T> extends Equatable {
     };
   }
 }
-
-/// Additionally functionality that can be run on a [Generation].
-extension GenerationExtension on Generation {
-  /// Returns a formatted filename based on the input [wave].
-  String filename(int wave) => 'generation wave $wave.txt';
-
-  /// Writes this [Generation] to a text file.
-  Future<void> writeToFile() async {
-    final directoryPath = (await getApplicationDocumentsDirectory()).path;
-    final filename = this.filename(wave);
-
-    final myFile = File('$directoryPath/$filename');
-    await myFile.writeAsString(
-      jsonEncode(
-        toJson(),
-      ),
-    );
-  }
-
-  /// Returns a [Generation] object read in from a text file corresponding with
-  /// the input [wave].
-  Future<Generation> readFromFile({
-    required int wave,
-  }) async {
-    final directoryPath = (await getApplicationDocumentsDirectory()).path;
-    final filename = this.filename(wave);
-
-    final myFile = File('$directoryPath/$filename');
-    final jsonString = await myFile.readAsString();
-
-    return Generation.fromJson(jsonDecode(jsonString));
-  }
-}
