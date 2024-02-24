@@ -102,9 +102,10 @@ class GeneticEvolution<T> {
     fileParser.writeGenerationToFile(generation: generation);
   }
 
+  // TODO: This SHOULD be able to be a void!
   /// Loads in a [Generation] from a file corresponding to the input [wave] and
   /// sets it internally on this [GeneticEvolution] object.
-  Future<void> loadGenerationFromFile({
+  Future<Generation<T>> loadGenerationFromFile({
     required int wave,
     // TODO: Should this be required?
     JsonConverter? geneJsonConverter,
@@ -125,6 +126,7 @@ class GeneticEvolution<T> {
     // Set _fromLoad so that we know to return the generation from file on the
     // next retrieval call.
     _fromLoad = true;
+    return Future.value(_generation);
   }
 
   /// Returns a valid [FileParser] object based on the input [fileParser] and
