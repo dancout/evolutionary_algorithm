@@ -33,7 +33,7 @@ class GeneticEvolution<T> {
     required this.geneticEvolutionConfig,
     required this.fitnessService,
     required this.geneService,
-    JsonConverter? jsonConverter,
+    JsonConverter? geneJsonConverter,
     @visibleForTesting PopulationService<T>? populationService,
     @visibleForTesting EntityService<T>? entityService,
     @visibleForTesting EntityParentManinpulator<T>? entityParentManinpulator,
@@ -75,20 +75,48 @@ class GeneticEvolution<T> {
           selectionService: selectionService,
         );
 
-    if (jsonConverter != null) {
-      GeneticEvolution.jsonConverter = jsonConverter;
+    if (geneJsonConverter != null) {
+      GeneticEvolution.geneJsonConverter = geneJsonConverter;
     }
+  }
+
+  /// Writes the current [Generation] to a file.
+  Future<void> writeGenerationToFile({
+    // TODO: Should this fileparser exist on the GeneticEvolution object itself?
+    FileParser<Generation<T>>? fileParser,
+    JsonConverter? geneJsonConverter,
+    required JsonConverter generationJsonConverter,
+  }) async {
+    final generation = _generation;
+    if (generation == null) {
+      throw Exception('Tried to write a null generation to file.');
+    }
+
+    // Ensure that a FileParser is set so that we can properly load in a File.
+    fileParser = _getFileParser(
+      fileParser,
+      geneJsonConverter,
+      generationJsonConverter,
+    );
+
+    fileParser.writeGenerationToFile(generation: generation);
   }
 
   /// Loads in a [Generation] from a file corresponding to the input [wave] and
   /// sets it internally on this [GeneticEvolution] object.
   Future<void> loadGenerationFromFile({
     required int wave,
-    JsonConverter? jsonConverter,
-    FileParser<T>? fileParser,
+    // TODO: Should this be required?
+    JsonConverter? geneJsonConverter,
+    required JsonConverter generationJsonConverter,
+    FileParser<Generation<T>>? fileParser,
   }) async {
     // Ensure that a FileParser is set so that we can properly load in a File.
-    fileParser = _getFileParser(fileParser, jsonConverter);
+    fileParser = _getFileParser(
+      fileParser,
+      geneJsonConverter,
+      generationJsonConverter,
+    );
 
     // Load the Generation from file.
     _generation = await fileParser.readGenerationFromFile(
@@ -100,21 +128,26 @@ class GeneticEvolution<T> {
   }
 
   /// Returns a valid [FileParser] object based on the input [fileParser] and
-  /// [jsonConverter].
+  /// [geneJsonConverter].
   // TODO: Should probably move this to a FileParserHelper class or something
   /// similar.
-  FileParser<T> _getFileParser(FileParser<T>? fileParser,
-      JsonConverter<dynamic, dynamic>? jsonConverter) {
+  FileParser<Generation<T>> _getFileParser(
+    FileParser<Generation<T>>? fileParser,
+    JsonConverter<dynamic, dynamic>? geneJsonConverter,
+    JsonConverter<dynamic, dynamic> generationJsonConverter,
+  ) {
     if (fileParser == null) {
-      jsonConverter ??= GeneticEvolution.jsonConverter;
-      if (jsonConverter == null) {
+      // TODO: Should update this to also check on generationJsonConverter
+      geneJsonConverter ??= GeneticEvolution.geneJsonConverter;
+      if (geneJsonConverter == null) {
         throw AssertionError(
           'Either JsonConverter or FileParser must be provided for '
           'GeneticEvolution loadFromFile.',
         );
       } else {
-        fileParser = FileParser<T>(
-          jsonConverter: jsonConverter,
+        fileParser = FileParser<Generation<T>>(
+          geneJsonConverter: geneJsonConverter,
+          generationJsonConverter: generationJsonConverter,
         );
       }
     }
@@ -142,11 +175,11 @@ class GeneticEvolution<T> {
   Generation<T>? _generation;
 
   /// Used to convert objects of Type <T> to and from Json.
-  static JsonConverter? jsonConverter;
+  static JsonConverter? geneJsonConverter;
 
   /// The error to throw during an attempt to use a null [JsonConverter].
   static Error jsonConverterUnimplementedError = UnimplementedError(
-    'JsonConverter is undefined on GeneticEvolution.',
+    'geneJsonConverter is undefined on GeneticEvolution.',
   );
 
   /// Represents whether this object was created from a preloaded Generation.

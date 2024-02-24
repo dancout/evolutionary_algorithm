@@ -1,43 +1,51 @@
 part of 'package:genetic_evolution/genetic_evolution.dart';
 
 /// Parses [Generation] objects to and from text files.
+///
+/// This class has a Type <T> where <T> is meant to be Generation<S>.
+/// ie. FileParser<Generation<int>>.
 class FileParser<T> {
   FileParser({
-    required this.jsonConverter,
+    required this.geneJsonConverter,
+    required this.generationJsonConverter,
     this.getDirectoryPath = getApplicationDocumentsDirectory,
   }) {
+    // TODO: This GeneticEvolution.jsonConverter is meant to convert the Gene of
+    /// Type <T>, and should not be shared with the converter of a Generation!
+
     // Set the jsonConverter within the GeneticEvolution class so that we can
     // properly convert to and from Json on Type <T>.
-    GeneticEvolution.jsonConverter = jsonConverter;
+    GeneticEvolution.geneJsonConverter = geneJsonConverter;
   }
 
-  /// Used to convert objects of Type <T> to and from Json.
-  final JsonConverter jsonConverter;
+  /// Used to convert [Gene] objects to and from Json.
+  final JsonConverter geneJsonConverter;
+
+  /// Used to convert the object of Type <T> to and from Json.
+  final JsonConverter generationJsonConverter;
 
   /// Represents the directory path to find the parsed documents.
   final Future<Directory> Function() getDirectoryPath;
 
   /// Returns a formatted filename based on the input [wave].
-  static String generationFileName(int wave) => 'generation wave $wave.txt';
+  String generationFileName(int wave) => 'generation wave $wave.txt';
 
   /// Writes the input [generation] to a text file.
   Future<void> writeGenerationToFile({
-    required Generation<T> generation,
+    required T generation,
   }) async {
     final directoryPath = (await getDirectoryPath()).path;
-    final filename = generationFileName(generation.wave);
+    final filename = generationFileName((generation as Generation).wave);
 
     final myFile = File('$directoryPath/$filename');
     await myFile.writeAsString(
-      jsonEncode(
-        generation.toJson(),
-      ),
+      jsonEncode(generationJsonConverter.toJson(generation)),
     );
   }
 
   /// Returns a [Generation] object read in from a text file corresponding with
   /// the input [wave].
-  Future<Generation<T>> readGenerationFromFile({
+  Future<T> readGenerationFromFile({
     required int wave,
   }) async {
     final directoryPath = (await getDirectoryPath()).path;
@@ -46,6 +54,6 @@ class FileParser<T> {
     final myFile = File('$directoryPath/$filename');
     final jsonString = await myFile.readAsString();
 
-    return Generation.fromJson(jsonDecode(jsonString));
+    return generationJsonConverter.fromJson(jsonDecode(jsonString));
   }
 }

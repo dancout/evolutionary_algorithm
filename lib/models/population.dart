@@ -5,17 +5,22 @@ class Population<T> extends Equatable {
   /// Represents a collection of [Entity] objects.
   const Population({
     required this.entities,
-    this.sortingMethod = _fallbackSortMethod,
+    this.sortingMethod = fallbackSortMethod,
   });
 
   /// Represents the entities present within this population.
   final List<Entity<T>> entities;
 
   /// The method used to sort [entites].
-  final int Function(Entity<T> a, Entity<T> b)? sortingMethod;
+  @JsonKey(
+    toJson: sortingMethodToJson,
+    fromJson: sortingMethodFromJson,
+  )
+  final int Function(Entity a, Entity b)? sortingMethod;
 
+  // TODO: Can this be set back to private with underscore?
   /// Sorts [Entity] objects in order from highest fitness score to lowest.
-  static int _fallbackSortMethod(Entity a, Entity b) =>
+  static int fallbackSortMethod(Entity a, Entity b) =>
       b.fitnessScore.compareTo(a.fitnessScore);
 
   /// Returns a sorted list of [entities] in this population.
@@ -55,4 +60,10 @@ class Population<T> extends Equatable {
       // TODO: Consider option for writing sortingMethod to and from JSON.
     };
   }
+
+  // TODO: Consider building out a way to parse sortingMethod, if possible.
+  static sortingMethodToJson(int Function(Entity a, Entity b)? sortingMethod) =>
+      null;
+  // TODO: Can this be set back to private with underscore?
+  static sortingMethodFromJson(dynamic sortingMethod) => null;
 }
