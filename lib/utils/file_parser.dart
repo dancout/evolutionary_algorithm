@@ -32,11 +32,10 @@ class FileParser<T> {
 
   /// Writes the input [generation] to a text file.
   Future<void> writeGenerationToFile({
-    required T generation,
+    required Generation generation,
   }) async {
     final directoryPath = (await getDirectoryPath()).path;
-    final filename = generationFileName((generation as Generation).wave);
-
+    final filename = generationFileName(generation.wave);
     final myFile = File('$directoryPath/$filename');
     await myFile.writeAsString(
       jsonEncode(generationJsonConverter.toJson(generation)),
