@@ -34,6 +34,7 @@ class GeneticEvolution<T> {
     required this.fitnessService,
     required this.geneService,
     JsonConverter? geneJsonConverter,
+    this.fileParser,
     @visibleForTesting PopulationService<T>? populationService,
     @visibleForTesting EntityService<T>? entityService,
     @visibleForTesting EntityParentManinpulator<T>? entityParentManinpulator,
@@ -80,83 +81,6 @@ class GeneticEvolution<T> {
     }
   }
 
-  /// Writes the current [Generation] to a file.
-  Future<void> writeGenerationToFile({
-    // TODO: Should this fileparser exist on the GeneticEvolution object itself?
-    FileParser<Generation<T>>? fileParser,
-    JsonConverter? geneJsonConverter,
-    required JsonConverter generationJsonConverter,
-  }) async {
-    final generation = _generation;
-    if (generation == null) {
-      throw Exception('Tried to write a null generation to file.');
-    }
-
-    // Ensure that a FileParser is set so that we can properly load in a File.
-    fileParser = _getFileParser(
-      fileParser,
-      geneJsonConverter,
-      generationJsonConverter,
-    );
-
-    fileParser.writeGenerationToFile(generation: generation);
-  }
-
-  /// Loads in a [Generation] from a file corresponding to the input [wave] and
-  /// sets it internally on this [GeneticEvolution] object.
-  ///
-  /// This newly loaded in Generation will be visible on the following
-  /// [GeneticEvolution.nextGeneration] call.
-  Future<void> loadGenerationFromFile({
-    required int wave,
-    // TODO: Should this be required?
-    JsonConverter? geneJsonConverter,
-    required JsonConverter generationJsonConverter,
-    FileParser<Generation<T>>? fileParser,
-  }) async {
-    // Ensure that a FileParser is set so that we can properly load in a File.
-    fileParser = _getFileParser(
-      fileParser,
-      geneJsonConverter,
-      generationJsonConverter,
-    );
-
-    // Load the Generation from file.
-    _generation = await fileParser.readGenerationFromFile(
-      wave: wave,
-    );
-    // Set _fromLoad so that we know to return the generation from file on the
-    // next retrieval call.
-    _fromLoad = true;
-  }
-
-  /// Returns a valid [FileParser] object based on the input [fileParser] and
-  /// [geneJsonConverter].
-  // TODO: Should probably move this to a FileParserHelper class or something
-  /// similar.
-  FileParser<Generation<T>> _getFileParser(
-    FileParser<Generation<T>>? fileParser,
-    JsonConverter<dynamic, dynamic>? geneJsonConverter,
-    JsonConverter<dynamic, dynamic> generationJsonConverter,
-  ) {
-    if (fileParser == null) {
-      // TODO: Should update this to also check on generationJsonConverter
-      geneJsonConverter ??= GeneticEvolution.geneJsonConverter;
-      if (geneJsonConverter == null) {
-        throw AssertionError(
-          'Either JsonConverter or FileParser must be provided for '
-          'GeneticEvolution loadFromFile.',
-        );
-      } else {
-        fileParser = FileParser<Generation<T>>(
-          geneJsonConverter: geneJsonConverter,
-          generationJsonConverter: generationJsonConverter,
-        );
-      }
-    }
-    return fileParser;
-  }
-
   /// The config object used to store setup parameters for the Genetic Evolution
   /// algorithm.
   final GeneticEvolutionConfig geneticEvolutionConfig;
@@ -177,6 +101,9 @@ class GeneticEvolution<T> {
   // Represents the current generation.
   Generation<T>? _generation;
 
+  /// Used to parse [Generation] objects of Type [T] to and from JSON.
+  final FileParser<Generation<T>>? fileParser;
+
   /// Used to convert objects of Type <T> to and from Json.
   static JsonConverter? geneJsonConverter;
 
@@ -188,6 +115,7 @@ class GeneticEvolution<T> {
   /// Represents whether this object was created from a preloaded Generation.
   bool _fromLoad = false;
 
+  /// Returns the next [Generation] from this object.
   Future<Generation<T>> nextGeneration() async {
     late Population<T> population;
 
@@ -220,5 +148,44 @@ class GeneticEvolution<T> {
       wave: wave,
       population: population,
     );
+  }
+
+  /// Writes the current [Generation] to a file.
+  Future<void> writeGenerationToFile() async {
+    final generation = _generation;
+    if (generation == null) {
+      throw Exception('Tried to write a null generation to file.');
+    }
+
+    // Ensure that a FileParser is set so that we can properly load in a File.
+    final fileParser = this.fileParser;
+    if (fileParser == null) {
+      throw Exception('Tried to write a file with null fileParser.');
+    }
+
+    fileParser.writeGenerationToFile(generation: generation);
+  }
+
+  /// Loads in a [Generation] from a file corresponding to the input [wave] and
+  /// sets it internally on this [GeneticEvolution] object.
+  ///
+  /// This newly loaded in Generation will be visible on the following
+  /// [GeneticEvolution.nextGeneration] call.
+  Future<void> loadGenerationFromFile({
+    required int wave,
+  }) async {
+    // Ensure that a FileParser is set so that we can properly load in a File.
+    final fileParser = this.fileParser;
+    if (fileParser == null) {
+      throw Exception('Tried to write a file with null fileParser.');
+    }
+
+    // Load the Generation from file.
+    _generation = await fileParser.readGenerationFromFile(
+      wave: wave,
+    );
+    // Set _fromLoad so that we know to return the generation from file on the
+    // next retrieval call.
+    _fromLoad = true;
   }
 }
