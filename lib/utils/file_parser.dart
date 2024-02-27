@@ -17,7 +17,7 @@ class FileParser<T> {
     GeneticEvolution.geneJsonConverter = geneJsonConverter;
   }
 
-  /// Used to convert [Gene] objects to and from Json.
+  /// Used to convert [Gene] objects of Type [T] to and from Json.
   // TODO: Check on this Typed line below!
   // final JsonConverter<T, JSON> geneJsonConverter;
   final JsonConverter geneJsonConverter;

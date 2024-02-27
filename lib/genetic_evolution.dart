@@ -34,7 +34,6 @@ class GeneticEvolution<T> {
     required this.geneticEvolutionConfig,
     required this.fitnessService,
     required this.geneService,
-    JsonConverter? geneJsonConverter,
     this.fileParser,
     @visibleForTesting PopulationService<T>? populationService,
     @visibleForTesting EntityService<T>? entityService,
@@ -77,6 +76,7 @@ class GeneticEvolution<T> {
           selectionService: selectionService,
         );
 
+    final geneJsonConverter = fileParser?.geneJsonConverter;
     if (geneJsonConverter != null) {
       GeneticEvolution.geneJsonConverter = geneJsonConverter;
     }
@@ -102,7 +102,8 @@ class GeneticEvolution<T> {
   // Represents the current generation.
   Generation<T>? _generation;
 
-  /// Used to parse [Generation] objects of Type [T] to and from JSON.
+  /// Parses [Generation] objects of type [T] to and from text files by
+  /// converting to and from JSON.
   final FileParser<T>? fileParser;
 
   /// Used to convert objects of Type <T> to and from Json.
@@ -110,7 +111,8 @@ class GeneticEvolution<T> {
 
   /// The error to throw during an attempt to use a null [JsonConverter].
   static Error jsonConverterUnimplementedError = UnimplementedError(
-    'geneJsonConverter is undefined on GeneticEvolution.',
+    'geneJsonConverter is undefined on GeneticEvolution. Pass one in on the '
+    'FileParser object within the constructor.',
   );
 
   /// Represents whether this object was created from a preloaded Generation.
