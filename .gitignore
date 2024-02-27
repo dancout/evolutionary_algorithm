@@ -31,3 +31,5 @@ ios/Flutter/Generated.xcconfig
 coverage/lcov.info
 genetic_evolution.iml
 .idea/
+macos/Flutter/ephemeral/Flutter-Generated.xcconfig
+macos/Flutter/ephemeral/flutter_export_environment.sh
