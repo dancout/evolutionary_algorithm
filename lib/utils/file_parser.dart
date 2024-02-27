@@ -18,8 +18,6 @@ class FileParser<T> {
   }
 
   /// Used to convert [Gene] objects of Type [T] to and from Json.
-  // TODO: Check on this Typed line below!
-  // final JsonConverter<T, JSON> geneJsonConverter;
   final JsonConverter geneJsonConverter;
 
   /// Used to convert a [Generation] of Type [T] to and from Json.
