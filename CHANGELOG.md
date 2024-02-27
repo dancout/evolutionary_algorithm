@@ -1,5 +1,10 @@
 ## 0.2.1
 
+* Implemented to and from JSON on models
+* Implemented file parsing for generations
+
+## 0.2.1
+
 * Exposed `sortingMethod` on `Population` to be more customizable
 
 ## 0.2.0
