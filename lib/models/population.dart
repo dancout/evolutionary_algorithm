@@ -5,7 +5,7 @@ class Population<T> extends Equatable {
   /// Represents a collection of [Entity] objects.
   const Population({
     required this.entities,
-    this.sortingMethod = fallbackSortMethod,
+    this.sortingMethod = _fallbackSortMethod,
   });
 
   /// Represents the entities present within this population.
@@ -18,9 +18,8 @@ class Population<T> extends Equatable {
   )
   final int Function(Entity a, Entity b)? sortingMethod;
 
-  // TODO: Can this be set back to private with underscore?
   /// Sorts [Entity] objects in order from highest fitness score to lowest.
-  static int fallbackSortMethod(Entity a, Entity b) =>
+  static int _fallbackSortMethod(Entity a, Entity b) =>
       b.fitnessScore.compareTo(a.fitnessScore);
 
   /// Returns a sorted list of [entities] in this population.
