@@ -1,17 +1,16 @@
 part of 'package:genetic_evolution/genetic_evolution.dart';
 
-/// Parses [Generation] objects to and from text files.
-///
-/// This class has a Type <T> where <T> is meant to be Generation<S>.
-/// ie. FileParser<Generation<int>>.
+/// Parses [Generation] objects of type [T] to and from text files.
 class FileParser<T> {
   FileParser({
     required this.geneJsonConverter,
-    required this.generationJsonConverter,
+    GenerationJsonConverter<T>? generationJsonConverter,
     this.getDirectoryPath = getApplicationDocumentsDirectory,
   }) {
-    // TODO: This GeneticEvolution.jsonConverter is meant to convert the Gene of
-    /// Type <T>, and should not be shared with the converter of a Generation!
+    // Set the generationJsonConverter to the default value if one was not
+    // passed in.
+    this.generationJsonConverter =
+        generationJsonConverter ?? GenerationJsonConverter<T>();
 
     // Set the jsonConverter within the GeneticEvolution class so that we can
     // properly convert to and from Json on Type <T>.
@@ -19,10 +18,12 @@ class FileParser<T> {
   }
 
   /// Used to convert [Gene] objects to and from Json.
+  // TODO: Check on this Typed line below!
+  // final JsonConverter<T, JSON> geneJsonConverter;
   final JsonConverter geneJsonConverter;
 
-  /// Used to convert the object of Type <T> to and from Json.
-  final JsonConverter generationJsonConverter;
+  /// Used to convert a [Generation] of Type [T] to and from Json.
+  late final GenerationJsonConverter<T> generationJsonConverter;
 
   /// Represents the directory path to find the parsed documents.
   final Future<Directory> Function() getDirectoryPath;
@@ -32,7 +33,7 @@ class FileParser<T> {
 
   /// Writes the input [generation] to a text file.
   Future<void> writeGenerationToFile({
-    required Generation generation,
+    required Generation<T> generation,
   }) async {
     final directoryPath = (await getDirectoryPath()).path;
     final filename = generationFileName(generation.wave);
@@ -44,7 +45,7 @@ class FileParser<T> {
 
   /// Returns a [Generation] object read in from a text file corresponding with
   /// the input [wave].
-  Future<T> readGenerationFromFile({
+  Future<Generation<T>> readGenerationFromFile({
     required int wave,
   }) async {
     final directoryPath = (await getDirectoryPath()).path;

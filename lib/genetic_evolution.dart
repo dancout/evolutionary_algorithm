@@ -25,6 +25,7 @@ part 'package:genetic_evolution/services/gene_service.dart';
 part 'package:genetic_evolution/services/population_service.dart';
 part 'package:genetic_evolution/services/selection_service.dart';
 part 'package:genetic_evolution/utils/file_parser.dart';
+part 'package:genetic_evolution/utils/generation_json_converter.dart';
 
 /// Used for generating populations that evolve over time through genetic
 /// breeding and mutation.
@@ -102,7 +103,7 @@ class GeneticEvolution<T> {
   Generation<T>? _generation;
 
   /// Used to parse [Generation] objects of Type [T] to and from JSON.
-  final FileParser<Generation<T>>? fileParser;
+  final FileParser<T>? fileParser;
 
   /// Used to convert objects of Type <T> to and from Json.
   static JsonConverter? geneJsonConverter;
