@@ -75,6 +75,7 @@ void main() {
       ]);
 
       final actual = await testObject.reproduce(
+        populationSize: populationSize,
         population: population,
         wave: wave,
       );

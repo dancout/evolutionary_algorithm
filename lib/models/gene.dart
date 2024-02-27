@@ -19,4 +19,39 @@ class Gene<T> extends Equatable {
         value,
         mutatedWaves,
       ];
+
+  /// Converts the input [json] into a [Gene] object.
+  factory Gene.fromJson(Map<String, dynamic> json) {
+    // Grab the static JsonConverter
+    final geneJsonConverter = GeneticEvolution.geneJsonConverter;
+
+    // Check that it has been set
+    if (geneJsonConverter != null) {
+      return Gene<T>(
+        value: geneJsonConverter.fromJson(json['value']),
+        mutatedWaves: (json['mutatedWaves'] as List<dynamic>?)
+            ?.map((e) => e as int)
+            .toList(),
+      );
+    }
+    // If not, then throw an error from attempting to use a null JsonConverter.
+    throw GeneticEvolution.jsonConverterUnimplementedError;
+  }
+
+  /// Converts the [Gene] object to JSON.
+  Map<String, dynamic> toJson() {
+    // Grab the static JsonConverter
+    final geneJsonConverter = GeneticEvolution.geneJsonConverter;
+
+    // Check that it has been set
+    if (geneJsonConverter != null) {
+      return {
+        'value': geneJsonConverter.toJson(value),
+        'mutatedWaves': mutatedWaves,
+      };
+    }
+
+    // If not, then throw an error from attempting to use a null JsonConverter.
+    throw GeneticEvolution.jsonConverterUnimplementedError;
+  }
 }

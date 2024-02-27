@@ -36,4 +36,25 @@ class Entity<T> extends Equatable {
         fitnessScore,
         parents,
       ];
+
+  /// Converts the input [json] into a [Entity] object.
+  factory Entity.fromJson(Map<String, dynamic> json) {
+    return Entity<T>(
+      dna: DNA<T>.fromJson(json['dna']),
+      fitnessScore: (json['fitnessScore'] as num).toDouble(),
+      parents: (json['parents'] as List<dynamic>?)
+          ?.map((parentJson) =>
+              Entity<T>.fromJson(parentJson as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  /// Converts the [Entity] object to JSON.
+  Map<String, dynamic> toJson() {
+    return {
+      'dna': dna.toJson(),
+      'fitnessScore': fitnessScore,
+      'parents': parents?.map((parent) => parent.toJson()).toList(),
+    };
+  }
 }

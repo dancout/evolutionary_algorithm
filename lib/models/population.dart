@@ -12,7 +12,11 @@ class Population<T> extends Equatable {
   final List<Entity<T>> entities;
 
   /// The method used to sort [entites].
-  final int Function(Entity<T> a, Entity<T> b)? sortingMethod;
+  @JsonKey(
+    toJson: _sortingMethodToJson,
+    fromJson: _sortingMethodFromJson,
+  )
+  final int Function(Entity a, Entity b)? sortingMethod;
 
   /// Sorts [Entity] objects in order from highest fitness score to lowest.
   static int _fallbackSortMethod(Entity a, Entity b) =>
@@ -38,4 +42,27 @@ class Population<T> extends Equatable {
         entities,
         sortingMethod,
       ];
+
+  /// Converts the input [json] into a [Population] object.
+  factory Population.fromJson(Map<String, dynamic> json) {
+    return Population<T>(
+      entities: (json['entities'] as List<dynamic>)
+          .map((entityJson) => Entity<T>.fromJson(entityJson))
+          .toList(),
+    );
+  }
+
+  /// Converts the [Population] object to JSON.
+  Map<String, dynamic> toJson() {
+    return {
+      'entities': entities.map((entity) => entity.toJson()).toList(),
+      // TODO: Consider option for writing sortingMethod to and from JSON.
+    };
+  }
+
+  // TODO: Consider building out a way to parse sortingMethod, if possible.
+  static _sortingMethodToJson(
+          int Function(Entity a, Entity b)? sortingMethod) =>
+      null;
+  static _sortingMethodFromJson(dynamic sortingMethod) => null;
 }

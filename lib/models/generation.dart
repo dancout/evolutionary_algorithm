@@ -21,4 +21,22 @@ class Generation<T> extends Equatable {
         wave,
         population,
       ];
+
+  /// Converts the input [json] into a [Generation] object.
+  factory Generation.fromJson(Map<String, dynamic> json) {
+    return Generation<T>(
+      wave: (json['wave'] as num).toInt(),
+      population: Population<T>.fromJson(
+        json['population'],
+      ),
+    );
+  }
+
+  /// Converts the [Generation] object to JSON.
+  Map<String, dynamic> toJson() {
+    return {
+      'wave': wave,
+      'population': population.toJson(),
+    };
+  }
 }

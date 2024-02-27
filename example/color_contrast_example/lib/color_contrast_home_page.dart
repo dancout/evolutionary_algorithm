@@ -148,8 +148,7 @@ class _ColorContrastHomePageState extends State<ColorContrastHomePage> {
                     const SizedBox(height: 12),
                     const Text('Child Parents'),
                     ...?topScoringEntity.parents
-                        ?.map((e) => convertColorToBlockValue(e))
-                        .toList(),
+                        ?.map((e) => convertColorToBlockValue(e)),
                     const SizedBox(height: 12),
                   ],
                 ),
@@ -165,8 +164,7 @@ class _ColorContrastHomePageState extends State<ColorContrastHomePage> {
                     const SizedBox(height: 12),
                     const Text('Child Parents\' Scores'),
                     ...?topScoringEntity.parents
-                        ?.map((e) => Text(truncatedScore(e.fitnessScore)))
-                        .toList(),
+                        ?.map((e) => Text(truncatedScore(e.fitnessScore))),
                     const SizedBox(height: 12),
                   ],
                 ),

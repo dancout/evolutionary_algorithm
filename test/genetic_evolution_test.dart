@@ -111,6 +111,7 @@ void main() {
 
       when(() => mockPopulationService.reproduce(
             population: firstPopulation,
+            populationSize: populationSize,
             wave: 1,
           )).thenAnswer((_) async => secondPopulation);
 
@@ -132,7 +133,9 @@ void main() {
       verify(() => mockPopulationService.randomPopulation(
           populationSize: populationSize));
       verifyNever(() => mockPopulationService.reproduce(
-          population: firstPopulation, wave: 0));
+          populationSize: populationSize,
+          population: firstPopulation,
+          wave: 0));
 
       // Second Wave
       final expectedSecondGeneration = Generation(
@@ -143,7 +146,9 @@ void main() {
 
       expect(actualSecondGeneration, expectedSecondGeneration);
       verify(() => mockPopulationService.reproduce(
-          population: firstPopulation, wave: 1));
+          populationSize: populationSize,
+          population: firstPopulation,
+          wave: 1));
       verifyNever(() => mockPopulationService.randomPopulation(
           populationSize: populationSize));
     });

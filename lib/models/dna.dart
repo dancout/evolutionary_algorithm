@@ -12,4 +12,20 @@ class DNA<T> extends Equatable {
   List<Object?> get props => [
         genes,
       ];
+
+  /// Converts the input [json] into a [DNA] object.
+  factory DNA.fromJson(Map<String, dynamic> json) {
+    return DNA<T>(
+      genes: (json['genes'] as List<dynamic>)
+          .map((geneJson) => Gene<T>.fromJson(geneJson as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  /// Converts the [DNA] object to JSON.
+  Map<String, dynamic> toJson() {
+    return {
+      'genes': genes.map((gene) => gene.toJson()).toList(),
+    };
+  }
 }
