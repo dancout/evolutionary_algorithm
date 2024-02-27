@@ -13,8 +13,8 @@ class Population<T> extends Equatable {
 
   /// The method used to sort [entites].
   @JsonKey(
-    toJson: sortingMethodToJson,
-    fromJson: sortingMethodFromJson,
+    toJson: _sortingMethodToJson,
+    fromJson: _sortingMethodFromJson,
   )
   final int Function(Entity a, Entity b)? sortingMethod;
 
@@ -61,8 +61,8 @@ class Population<T> extends Equatable {
   }
 
   // TODO: Consider building out a way to parse sortingMethod, if possible.
-  static sortingMethodToJson(int Function(Entity a, Entity b)? sortingMethod) =>
+  static _sortingMethodToJson(
+          int Function(Entity a, Entity b)? sortingMethod) =>
       null;
-  // TODO: Can this be set back to private with underscore?
-  static sortingMethodFromJson(dynamic sortingMethod) => null;
+  static _sortingMethodFromJson(dynamic sortingMethod) => null;
 }
