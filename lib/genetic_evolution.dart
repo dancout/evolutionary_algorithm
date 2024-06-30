@@ -102,6 +102,8 @@ class GeneticEvolution<T> {
   // Represents the current generation.
   Generation<T>? _generation;
 
+  Generation<T>? get generation => _generation;
+
   /// Parses [Generation] objects of type [T] to and from text files by
   /// converting to and from JSON.
   final FileParser<T>? fileParser;
@@ -153,6 +155,19 @@ class GeneticEvolution<T> {
     );
   }
 
+  Future<Generation<T>> seedGenerationWithPopulation({
+    required Population<T> population,
+    int? wave,
+  }) async {
+    final generation = this._generation;
+    // Default to 0 if no existing generation is found.
+    final currentWave = wave ?? generation?.wave ?? 0;
+    return this._generation = Generation<T>(
+      wave: currentWave,
+      population: population,
+    );
+  }
+
   /// Writes the current [Generation] to a file.
   Future<void> writeGenerationToFile() async {
     final generation = _generation;
@@ -166,7 +181,7 @@ class GeneticEvolution<T> {
       throw Exception('Tried to write a file with null fileParser.');
     }
 
-    fileParser.writeGenerationToFile(generation: generation);
+    await fileParser.writeGenerationToFile(generation: generation);
   }
 
   /// Loads in a [Generation] from a file corresponding to the input [wave] and
@@ -190,5 +205,7 @@ class GeneticEvolution<T> {
     // Set _fromLoad so that we know to return the generation from file on the
     // next retrieval call.
     _fromLoad = true;
+
+    // return _generation;
   }
 }
